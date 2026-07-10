@@ -1426,17 +1426,14 @@ export function InvitationClient({ pases, nombre }: { pases: number; nombre: str
       <Hero />
       <Mensaje />
       <Familias />
-      <PhotoDivider src="/recuerdos/foto-1.jpg" aspect="4 / 5" tone={C.wine} />
+      {/* PhotoDivider fotos del template retiradas a petición del cliente — pendiente
+          sustituir por fotos reales de Ana Laura & Francisco (ver props: src, aspect, tone) */}
       <Ceremonia />
-      <PhotoDivider src="/recuerdos/foto-3.jpg" aspect="1 / 1" tone={C.olive} />
       <Itinerario />
-      <PhotoDivider src="/recuerdos/foto-2.jpg" aspect="1 / 1" tone={C.mauve} />
       <Hospedaje />
-      <PhotoDivider src="/recuerdos/foto-5.jpg" aspect="4 / 5" tone={C.goldLight} />
       <Vestimenta />
       <Divider tone={C.olive} />
       <AvisoNinos />
-      <PhotoDivider src="/recuerdos/foto-4.jpg" aspect="6 / 5" tone={C.gold} />
       <MesaRegalos />
       <Divider tone={C.sage} />
       <RSVPClient pases={pases} nombre={nombre} />
