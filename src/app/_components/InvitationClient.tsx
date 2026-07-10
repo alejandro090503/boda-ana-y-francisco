@@ -3,23 +3,28 @@
 import { useEffect, useState } from "react";
 import { RSVPClient } from "./RSVPClient";
 
-/* Paleta del cliente, apagada para el sistema editorial (tonos vivos → sobrios):
-   #dece59→oliva, #79cc62→salvia, #e6974e→bronce, #bb63c2→malva, #b02a31→vino */
+/* Paleta del cliente, en tonos "piedra preciosa" de viñedo (vivos → ricos y editoriales,
+   visibles pero no saturados tipo Canva): #dece59→mostaza, #79cc62→salvia bosque,
+   #e6974e→terracota, #bb63c2→ciruela, #b02a31→vino. Cada sección tiene un color
+   protagonista aplicado en icono + cinta + acento, no solo un detalle mínimo. */
 const C = {
   black: "#0D0D0D",
   white: "#FFFFFF",
-  wine: "#B02A31",       // vino — acento principal / textos de acento (viñedo Cava 57)
-  wineDeep: "#8F2027",
-  gold: "#C68A52",       // ámbar/bronce apagado — hairlines/ornamentos/esquinas
-  goldLight: "#D9AE82",  // bronce claro
-  sage: "#7F9A6E",       // verde salvia apagado (de #79cc62)
-  olive: "#B3A85C",      // verde-oro oliva apagado (de #dece59)
-  mauve: "#9C6FA1",      // uva/malva apagado (de #bb63c2)
+  wine: "#B02A31",        // vino — Ceremonia, CTAs primarios, ticket RSVP (contraste 6.1:1 en crema)
+  wineDeep: "#8A2027",
+  gold: "#A66B34",        // terracota/bronce — Mesa de Regalos, íconos (4.1:1 en crema, texto-seguro)
+  goldLight: "#C17D3F",   // terracota claro — SOLO decorativo (hairlines/gradientes, no texto)
+  sage: "#4F7A47",        // salvia bosque — Nuestros Padres, Cena (4.7:1 en crema)
+  sageLight: "#79945F",
+  olive: "#8F7620",       // mostaza — Itinerario (4.1:1 en crema, texto-seguro)
+  oliveLight: "#B0932A",  // mostaza clara — SOLO decorativo
+  mauve: "#83488B",       // ciruela — Hospedaje, RSVP, Fiesta (6.1:1 en crema)
+  mauveLight: "#A06BA8",
   charcoal: "#2C2C2C",
   gray: "#6B6B6B",
   softGray: "#767676",
   cream: "#FAF8F5",
-  border: "#E7DDD0",     // borde cálido
+  border: "#E7DDD0",      // borde cálido
 };
 
 /* ─── Countdown ─── */
@@ -95,15 +100,15 @@ function Countdown() {
   );
 }
 
-/* ─── Ornament ─── (la gema central lleva el color de acento de cada sección) */
+/* ─── Ornament ─── (hairline + gema en el color protagonista de cada sección) */
 function Ornament({ width = 100, tone = C.gold }: { width?: number; tone?: string }) {
   return (
     <div className="flex items-center justify-center gap-3 my-2">
-      <div style={{ height: 1, width: width / 2, backgroundColor: C.gold, opacity: 0.45 }} />
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-        <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={tone} opacity="0.75" />
+      <div style={{ height: 1.5, width: width / 2, backgroundColor: tone, opacity: 0.55 }} />
+      <svg width="13" height="13" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+        <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={tone} />
       </svg>
-      <div style={{ height: 1, width: width / 2, backgroundColor: C.gold, opacity: 0.45 }} />
+      <div style={{ height: 1.5, width: width / 2, backgroundColor: tone, opacity: 0.55 }} />
     </div>
   );
 }
@@ -119,12 +124,12 @@ function Divider({ tone = C.mauve }: { tone?: string }) {
         paddingBottom: 24,
       }}
     >
-      <div style={{ height: 1, width: 56, backgroundColor: C.gold, opacity: 0.3 }} />
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="mx-3">
-        <circle cx="12" cy="12" r="1.2" fill={tone} opacity="0.8" />
-        <circle cx="12" cy="12" r="4.5" stroke={C.gold} strokeWidth="0.5" opacity="0.4" />
+      <div style={{ height: 1.5, width: 56, backgroundColor: tone, opacity: 0.5 }} />
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="mx-3">
+        <circle cx="12" cy="12" r="1.6" fill={tone} />
+        <circle cx="12" cy="12" r="5.5" stroke={tone} strokeWidth="0.75" opacity="0.55" />
       </svg>
-      <div style={{ height: 1, width: 56, backgroundColor: C.gold, opacity: 0.3 }} />
+      <div style={{ height: 1.5, width: 56, backgroundColor: tone, opacity: 0.5 }} />
     </div>
   );
 }
@@ -413,7 +418,7 @@ function Familias() {
               fontSize: 11,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: C.softGray,
+              color: C.sage,
               textAlign: "center",
               marginBottom: 14,
             }}
@@ -453,7 +458,7 @@ function Familias() {
               fontSize: 11,
               letterSpacing: "0.22em",
               textTransform: "uppercase",
-              color: C.softGray,
+              color: C.sage,
               textAlign: "center",
               marginBottom: 14,
             }}
@@ -489,49 +494,59 @@ function Ceremonia() {
       <div style={{ maxWidth: 460, margin: "0 auto" }}>
         <SectionTitle eyebrow="Civil" title="CEREMONIA" tone={C.wine} />
 
-        <p
+        <div
           style={{
-            fontFamily: "var(--font-heading)",
-            fontWeight: 700,
-            fontSize: 30,
-            color: C.black,
-            letterSpacing: "0.04em",
-            textAlign: "center",
-            marginBottom: 12,
+            borderLeft: `3px solid ${C.wine}`,
+            backgroundColor: "rgba(176,42,49,0.05)",
+            padding: "24px 20px",
+            maxWidth: 360,
+            margin: "0 auto 28px",
           }}
         >
-          4:00 p.m.
-        </p>
+          <p
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontWeight: 700,
+              fontSize: 30,
+              color: C.wine,
+              letterSpacing: "0.04em",
+              textAlign: "center",
+              marginBottom: 12,
+            }}
+          >
+            4:00 p.m.
+          </p>
 
-        <p
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontWeight: 600,
-            fontSize: 18,
-            color: C.charcoal,
-            lineHeight: 1.5,
-            textAlign: "center",
-            marginBottom: 8,
-          }}
-        >
-          Cava 57
-        </p>
+          <p
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontWeight: 600,
+              fontSize: 18,
+              color: C.charcoal,
+              lineHeight: 1.5,
+              textAlign: "center",
+              marginBottom: 8,
+            }}
+          >
+            Cava 57
+          </p>
 
-        <p
-          style={{
-            fontFamily: "var(--font-body)",
-            fontWeight: 500,
-            fontSize: 16,
-            color: C.gray,
-            lineHeight: 1.55,
-            textAlign: "center",
-            marginBottom: 32,
-          }}
-        >
-          Carretera 57 San Juan del Río–Pedro Escobedo,
-          <br />
-          San Juan del Río, Querétaro
-        </p>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontWeight: 500,
+              fontSize: 16,
+              color: C.gray,
+              lineHeight: 1.55,
+              textAlign: "center",
+              margin: 0,
+            }}
+          >
+            Carretera 57 San Juan del Río–Pedro Escobedo,
+            <br />
+            San Juan del Río, Querétaro
+          </p>
+        </div>
 
         <a
           href="https://www.google.com/maps/search/?api=1&query=Cava+57+San+Juan+del+R%C3%ADo+Quer%C3%A9taro"
@@ -546,13 +561,13 @@ function Ceremonia() {
             fontSize: 12,
             letterSpacing: "0.15em",
             textTransform: "uppercase",
-            color: C.black,
+            color: C.wine,
             textDecoration: "none",
             paddingBottom: 6,
-            borderBottom: `1px solid ${C.gold}`,
+            borderBottom: `2px solid ${C.wine}`,
           }}
         >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={C.wine} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
             <circle cx="12" cy="10" r="3" />
           </svg>
@@ -563,10 +578,10 @@ function Ceremonia() {
   );
 }
 
-/* ─── Sketch icons para itinerario ─── */
-function IconRings() {
+/* ─── Sketch icons para itinerario ─── (cada uno recibe el color de su momento: el "hilo" de la paleta) */
+function IconRings({ tone = C.black }: { tone?: string }) {
   return (
-    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={C.black} strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={tone} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {/* Ring izquierdo */}
       <ellipse cx="30" cy="46" rx="16" ry="8" />
       <path d="M14 46 Q14 30 30 26 Q46 22 46 46" />
@@ -582,9 +597,9 @@ function IconRings() {
     </svg>
   );
 }
-function IconCoctel() {
+function IconCoctel({ tone = C.black }: { tone?: string }) {
   return (
-    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={C.black} strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={tone} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {/* Copa martini */}
       <path d="M16 18 L40 52 L64 18 Z" />
       <line x1="40" y1="52" x2="40" y2="68" />
@@ -597,9 +612,9 @@ function IconCoctel() {
     </svg>
   );
 }
-function IconRecepcion() {
+function IconRecepcion({ tone = C.black }: { tone?: string }) {
   return (
-    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={C.black} strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={tone} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {/* Copa champagne izquierda */}
       <path d="M24 16 Q20 32 28 40 L28 62" />
       <path d="M24 16 Q28 32 28 40" />
@@ -609,18 +624,18 @@ function IconRecepcion() {
       <path d="M56 16 Q60 32 52 40" />
       <line x1="44" y1="62" x2="60" y2="62" />
       {/* Burbujas */}
-      <circle cx="26" cy="28" r="1.2" fill={C.black} opacity="0.5" />
-      <circle cx="28" cy="22" r="0.9" fill={C.black} opacity="0.5" />
-      <circle cx="54" cy="26" r="1.2" fill={C.black} opacity="0.5" />
-      <circle cx="56" cy="20" r="0.9" fill={C.black} opacity="0.5" />
+      <circle cx="26" cy="28" r="1.2" fill={tone} opacity="0.6" />
+      <circle cx="28" cy="22" r="0.9" fill={tone} opacity="0.6" />
+      <circle cx="54" cy="26" r="1.2" fill={tone} opacity="0.6" />
+      <circle cx="56" cy="20" r="0.9" fill={tone} opacity="0.6" />
       {/* Brindis */}
       <path d="M28 40 Q40 35 52 40" />
     </svg>
   );
 }
-function IconCena() {
+function IconCena({ tone = C.black }: { tone?: string }) {
   return (
-    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={C.black} strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={tone} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {/* Tenedor */}
       <line x1="26" y1="16" x2="26" y2="64" />
       <line x1="20" y1="16" x2="20" y2="32" />
@@ -633,9 +648,9 @@ function IconCena() {
     </svg>
   );
 }
-function IconBaile() {
+function IconBaile({ tone = C.black }: { tone?: string }) {
   return (
-    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={C.black} strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={tone} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {/* Nota musical grande */}
       <line x1="44" y1="18" x2="44" y2="54" />
       <line x1="44" y1="18" x2="64" y2="14" />
@@ -643,18 +658,18 @@ function IconBaile() {
       <ellipse cx="38" cy="56" rx="8" ry="5" transform="rotate(-15 38 56)" />
       <ellipse cx="58" cy="52" rx="8" ry="5" transform="rotate(-15 58 52)" />
       {/* Pequeñas notas decorativas */}
-      <text x="14" y="38" fontSize="16" fontFamily="serif" fill={C.black} stroke="none" opacity="0.25">♩</text>
+      <text x="14" y="38" fontSize="16" fontFamily="serif" fill={tone} stroke="none" opacity="0.4">♩</text>
     </svg>
   );
 }
-function IconDespedida() {
+function IconDespedida({ tone = C.black }: { tone?: string }) {
   return (
-    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={C.black} strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg width="72" height="72" viewBox="0 0 80 80" fill="none" stroke={tone} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {/* Media luna */}
       <path d="M50 16 A24 24 0 1 0 50 64 A19 19 0 0 1 50 16 Z" />
       {/* Destellos */}
-      <path d="M22 24 l1.6 4.4 4.4 1.6 -4.4 1.6 -1.6 4.4 -1.6 -4.4 -4.4 -1.6 4.4 -1.6 Z" fill={C.black} stroke="none" opacity="0.55" />
-      <path d="M30 50 l1.1 3 3 1.1 -3 1.1 -1.1 3 -1.1 -3 -3 -1.1 3 -1.1 Z" fill={C.black} stroke="none" opacity="0.4" />
+      <path d="M22 24 l1.6 4.4 4.4 1.6 -4.4 1.6 -1.6 4.4 -1.6 -4.4 -4.4 -1.6 4.4 -1.6 Z" fill={tone} stroke="none" opacity="0.7" />
+      <path d="M30 50 l1.1 3 3 1.1 -3 1.1 -1.1 3 -1.1 -3 -3 -1.1 3 -1.1 Z" fill={tone} stroke="none" opacity="0.55" />
     </svg>
   );
 }
@@ -662,7 +677,7 @@ function IconDespedida() {
 /* ═══════════════════════════════════════════════════════
    PHOTO DIVIDER — Foto entre secciones (sustituye al divider ornamental)
    ═══════════════════════════════════════════════════════ */
-function PhotoDivider({ src, aspect = "16 / 10" }: { src: string; aspect?: string }) {
+function PhotoDivider({ src, aspect = "16 / 10", tone = C.gold }: { src: string; aspect?: string; tone?: string }) {
   return (
     <div
       aria-hidden="true"
@@ -688,13 +703,14 @@ function PhotoDivider({ src, aspect = "16 / 10" }: { src: string; aspect?: strin
             aspectRatio: aspect,
             overflow: "hidden",
             boxShadow: "0 2px 22px rgba(13,13,13,0.08)",
+            border: `2px solid ${tone}`,
           }}
         >
-          {/* Esquinas decorativas en oro */}
-          <div style={{ position: "absolute", top: 8, left: 8, width: 14, height: 14, borderTop: `1px solid ${C.gold}`, borderLeft: `1px solid ${C.gold}`, opacity: 0.7, zIndex: 2 }} />
-          <div style={{ position: "absolute", top: 8, right: 8, width: 14, height: 14, borderTop: `1px solid ${C.gold}`, borderRight: `1px solid ${C.gold}`, opacity: 0.7, zIndex: 2 }} />
-          <div style={{ position: "absolute", bottom: 8, left: 8, width: 14, height: 14, borderBottom: `1px solid ${C.gold}`, borderLeft: `1px solid ${C.gold}`, opacity: 0.7, zIndex: 2 }} />
-          <div style={{ position: "absolute", bottom: 8, right: 8, width: 14, height: 14, borderBottom: `1px solid ${C.gold}`, borderRight: `1px solid ${C.gold}`, opacity: 0.7, zIndex: 2 }} />
+          {/* Esquinas decorativas en el color de la sección siguiente */}
+          <div style={{ position: "absolute", top: 8, left: 8, width: 16, height: 16, borderTop: `2px solid ${C.white}`, borderLeft: `2px solid ${C.white}`, opacity: 0.9, zIndex: 2 }} />
+          <div style={{ position: "absolute", top: 8, right: 8, width: 16, height: 16, borderTop: `2px solid ${C.white}`, borderRight: `2px solid ${C.white}`, opacity: 0.9, zIndex: 2 }} />
+          <div style={{ position: "absolute", bottom: 8, left: 8, width: 16, height: 16, borderBottom: `2px solid ${C.white}`, borderLeft: `2px solid ${C.white}`, opacity: 0.9, zIndex: 2 }} />
+          <div style={{ position: "absolute", bottom: 8, right: 8, width: 16, height: 16, borderBottom: `2px solid ${C.white}`, borderRight: `2px solid ${C.white}`, opacity: 0.9, zIndex: 2 }} />
 
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -720,24 +736,27 @@ function PhotoDivider({ src, aspect = "16 / 10" }: { src: string; aspect?: strin
    ITINERARIO
    ═══════════════════════════════════════════════════════ */
 function Itinerario() {
-  const items: { confirmed: boolean; hora: string; evento: string; icon: React.ReactNode; extra?: React.ReactNode }[] = [
+  const items: { confirmed: boolean; hora: string; evento: string; tone: string; icon: React.ReactNode; extra?: React.ReactNode }[] = [
     {
       confirmed: true,
       hora: "4:00 p.m.",
       evento: "CEREMONIA",
-      icon: <IconRings />,
+      tone: C.wine,
+      icon: <IconRings tone={C.wine} />,
     },
     {
       confirmed: true,
       hora: "5:00 p.m.",
       evento: "CÓCTEL",
-      icon: <IconCoctel />,
+      tone: C.gold,
+      icon: <IconCoctel tone={C.gold} />,
     },
     {
       confirmed: true,
       hora: "5:30 p.m.",
       evento: "RECEPCIÓN",
-      icon: <IconRecepcion />,
+      tone: C.olive,
+      icon: <IconRecepcion tone={C.olive} />,
       extra: (
         <div style={{ marginTop: 10 }}>
           <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 14, color: C.gray, textAlign: "center", marginBottom: 10 }}>
@@ -747,9 +766,9 @@ function Itinerario() {
             href="https://www.google.com/maps/search/?api=1&query=Cava+57+San+Juan+del+R%C3%ADo+Quer%C3%A9taro"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: C.wine, textDecoration: "none" }}
+            style={{ display: "inline-flex", alignItems: "center", gap: 8, fontFamily: "var(--font-body)", fontWeight: 600, fontSize: 12, letterSpacing: "0.1em", textTransform: "uppercase", color: C.olive, textDecoration: "none" }}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="1.5">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={C.olive} strokeWidth="1.7">
               <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
               <circle cx="12" cy="10" r="3" />
             </svg>
@@ -758,9 +777,9 @@ function Itinerario() {
         </div>
       ),
     },
-    { confirmed: true,  hora: "6:00 p.m.",      evento: "CENA",       icon: <IconCena /> },
-    { confirmed: true,  hora: "7:30 p.m.",      evento: "FIESTA",     icon: <IconBaile /> },
-    { confirmed: true,  hora: "1:00 a.m.",      evento: "DESPEDIDA",  icon: <IconDespedida /> },
+    { confirmed: true,  hora: "6:00 p.m.",      evento: "CENA",       tone: C.sage,  icon: <IconCena tone={C.sage} /> },
+    { confirmed: true,  hora: "7:30 p.m.",      evento: "FIESTA",     tone: C.mauve, icon: <IconBaile tone={C.mauve} /> },
+    { confirmed: true,  hora: "1:00 a.m.",      evento: "DESPEDIDA",  tone: C.wine,  icon: <IconDespedida tone={C.wine} /> },
   ];
 
   return (
@@ -770,7 +789,7 @@ function Itinerario() {
       <div style={{ maxWidth: 320, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
         {items.map((item, i) => (
           <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-            {/* Icono sketch */}
+            {/* Icono sketch coloreado */}
             <div style={{ opacity: item.confirmed ? 1 : 0.35 }}>
               {item.icon}
             </div>
@@ -782,7 +801,7 @@ function Itinerario() {
                 fontWeight: 700,
                 fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
                 letterSpacing: "0.08em",
-                color: C.black,
+                color: item.tone,
                 textAlign: "center",
                 marginTop: 8,
                 marginBottom: 6,
@@ -810,15 +829,15 @@ function Itinerario() {
             {/* Extra (dirección / mapa) */}
             {item.extra && item.extra}
 
-            {/* Línea conectora vertical */}
+            {/* Línea conectora vertical — hereda el color del siguiente momento (hilo de la paleta) */}
             {i < items.length - 1 && (
               <div
                 aria-hidden="true"
                 style={{
-                  width: 1,
+                  width: 2,
                   height: 52,
-                  backgroundColor: C.black,
-                  opacity: 0.18,
+                  backgroundColor: items[i + 1].tone,
+                  opacity: 0.5,
                   margin: "20px auto",
                 }}
               />
@@ -896,6 +915,8 @@ function Hospedaje() {
               backgroundColor: C.white,
               boxShadow: "0 2px 24px rgba(13,13,13,0.07)",
               overflow: "hidden",
+              border: `1px solid ${C.mauve}`,
+              borderTop: "none",
             }}
           >
             {/* Foto del hotel */}
@@ -910,23 +931,23 @@ function Hospedaje() {
               <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 48, background: "linear-gradient(to bottom, transparent, rgba(13,13,13,0.18))" }} />
             </div>
 
-            {/* Franja dorada */}
-            <div style={{ height: 2, background: `linear-gradient(90deg, ${C.gold} 0%, ${C.goldLight} 50%, ${C.gold} 100%)` }} />
+            {/* Cinta ciruela — color protagonista de Hospedaje */}
+            <div style={{ height: 5, backgroundColor: C.mauve }} />
 
             {/* Cuerpo */}
             <div style={{ padding: "22px 28px 24px", display: "flex", flexDirection: "column", alignItems: "center" }}>
 
-              {/* Esquinas decorativas */}
-              <div style={{ position: "absolute", top: 180, left: 12, width: 14, height: 14, borderTop: `1px solid ${C.gold}`, borderLeft: `1px solid ${C.gold}`, opacity: 0.5 }} aria-hidden="true" />
-              <div style={{ position: "absolute", top: 180, right: 12, width: 14, height: 14, borderTop: `1px solid ${C.gold}`, borderRight: `1px solid ${C.gold}`, opacity: 0.5 }} aria-hidden="true" />
+              {/* Esquinas decorativas en ciruela */}
+              <div style={{ position: "absolute", top: 176, left: 12, width: 16, height: 16, borderTop: `2px solid ${C.mauve}`, borderLeft: `2px solid ${C.mauve}` }} aria-hidden="true" />
+              <div style={{ position: "absolute", top: 176, right: 12, width: 16, height: 16, borderTop: `2px solid ${C.mauve}`, borderRight: `2px solid ${C.mauve}` }} aria-hidden="true" />
 
               {/* Nombre */}
               <p style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: "clamp(1.1rem, 5vw, 1.4rem)", letterSpacing: "0.12em", color: C.black, lineHeight: 1.2, textAlign: "center" }}>
                 {h.nombre.toUpperCase()}
               </p>
 
-              {/* Línea gold */}
-              <div aria-hidden="true" style={{ height: 1, width: 32, background: `linear-gradient(90deg, transparent, ${C.gold}, transparent)`, margin: "16px auto" }} />
+              {/* Línea ciruela */}
+              <div aria-hidden="true" style={{ height: 2, width: 36, backgroundColor: C.mauve, margin: "16px auto" }} />
 
               {/* Reservación */}
               <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 14, lineHeight: 1.6, color: C.charcoal, textAlign: "center", maxWidth: 250, marginBottom: 18 }}>
@@ -951,7 +972,7 @@ function Hospedaje() {
                     textTransform: "uppercase",
                     color: C.white,
                     textDecoration: "none",
-                    backgroundColor: C.black,
+                    backgroundColor: C.wine,
                     padding: "9px 16px",
                   }}
                 >
@@ -972,20 +993,20 @@ function Hospedaje() {
                     fontSize: 10,
                     letterSpacing: "0.18em",
                     textTransform: "uppercase",
-                    color: C.black,
+                    color: C.mauve,
                     textDecoration: "none",
-                    border: `1px solid ${C.border}`,
+                    border: `1.5px solid ${C.mauve}`,
                     padding: "9px 16px",
                   }}
                 >
-                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={C.gold} strokeWidth="1.5" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={C.mauve} strokeWidth="1.7" strokeLinecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
                   Ubicación
                 </a>
               </div>
             </div>
 
-            {/* Franja dorada inferior */}
-            <div style={{ height: 1, background: `linear-gradient(90deg, transparent, ${C.gold}, transparent)`, opacity: 0.4 }} />
+            {/* Cinta ciruela inferior */}
+            <div style={{ height: 3, backgroundColor: C.mauve, opacity: 0.6 }} />
           </div>
         ))}
       </div>
@@ -1212,12 +1233,17 @@ function MesaRegalos() {
           style={{
             backgroundColor: C.white,
             border: `1px solid ${C.border}`,
-            padding: "36px 24px",
+            borderTop: "none",
             width: "100%",
             maxWidth: 320,
             textAlign: "center",
+            overflow: "hidden",
           }}
         >
+          {/* Cinta terracota — color protagonista de Mesa de Regalos */}
+          <div style={{ height: 6, backgroundColor: C.gold }} />
+
+          <div style={{ padding: "30px 24px 36px" }}>
           <p
             style={{
               fontFamily: "var(--font-heading)",
@@ -1245,10 +1271,9 @@ function MesaRegalos() {
           </p>
           <div
             style={{
-              height: 1,
+              height: 2,
               width: 36,
               backgroundColor: C.gold,
-              opacity: 0.45,
               margin: "20px auto",
             }}
           />
@@ -1309,6 +1334,7 @@ function MesaRegalos() {
           >
             014680566622982430
           </p>
+          </div>
         </div>
       </div>
     </Section>
@@ -1324,12 +1350,19 @@ function Footer() {
       className="text-center"
       style={{
         backgroundColor: C.black,
-        paddingTop: 72,
+        paddingTop: 0,
         paddingBottom: 72,
         paddingLeft: 24,
         paddingRight: 24,
       }}
     >
+      {/* Firma de paleta — los 5 colores de la boda, como swatch editorial */}
+      <div aria-hidden="true" style={{ display: "flex", width: "100%", height: 6, marginBottom: 56 }}>
+        {[C.oliveLight, C.sage, C.goldLight, C.mauve, C.wine].map((c) => (
+          <div key={c} style={{ flex: 1, backgroundColor: c }} />
+        ))}
+      </div>
+
       <p
         aria-hidden="true"
         style={{
@@ -1393,17 +1426,17 @@ export function InvitationClient({ pases, nombre }: { pases: number; nombre: str
       <Hero />
       <Mensaje />
       <Familias />
-      <PhotoDivider src="/recuerdos/foto-1.jpg" aspect="4 / 5" />
+      <PhotoDivider src="/recuerdos/foto-1.jpg" aspect="4 / 5" tone={C.wine} />
       <Ceremonia />
-      <PhotoDivider src="/recuerdos/foto-3.jpg" aspect="1 / 1" />
+      <PhotoDivider src="/recuerdos/foto-3.jpg" aspect="1 / 1" tone={C.olive} />
       <Itinerario />
-      <PhotoDivider src="/recuerdos/foto-2.jpg" aspect="1 / 1" />
+      <PhotoDivider src="/recuerdos/foto-2.jpg" aspect="1 / 1" tone={C.mauve} />
       <Hospedaje />
-      <PhotoDivider src="/recuerdos/foto-5.jpg" aspect="4 / 5" />
+      <PhotoDivider src="/recuerdos/foto-5.jpg" aspect="4 / 5" tone={C.goldLight} />
       <Vestimenta />
       <Divider tone={C.olive} />
       <AvisoNinos />
-      <PhotoDivider src="/recuerdos/foto-4.jpg" aspect="6 / 5" />
+      <PhotoDivider src="/recuerdos/foto-4.jpg" aspect="6 / 5" tone={C.gold} />
       <MesaRegalos />
       <Divider tone={C.sage} />
       <RSVPClient pases={pases} nombre={nombre} />

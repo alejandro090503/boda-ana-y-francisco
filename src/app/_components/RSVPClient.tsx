@@ -9,9 +9,9 @@ const DEADLINE = new Date(2026, 7, 28, 23, 59, 59, 999);
 const C = {
   black: "#0D0D0D",
   wine: "#B02A31",
-  gold: "#C68A52",
-  goldLight: "#D9AE82",
-  mauve: "#9C6FA1",
+  gold: "#A66B34",
+  goldLight: "#C17D3F",
+  mauve: "#83488B",
   gray: "#6B6B6B",
   softGray: "#767676",
   charcoal: "#2C2C2C",
@@ -29,11 +29,11 @@ function PaseTicket({ pases, nombre }: { pases: number; nombre: string }) {
         style={{ background: "radial-gradient(ellipse, rgba(176,42,49,0.12) 0%, transparent 70%)", filter: "blur(20px)" }}
         aria-hidden="true"
       />
-      <div className="relative" style={{ backgroundColor: C.white, border: `1px solid ${C.border}`, boxShadow: "0 20px 60px rgba(13,13,13,0.08)", overflow: "hidden" }}>
-        <div style={{ backgroundColor: C.wine, height: 4 }} />
+      <div className="relative" style={{ backgroundColor: C.white, border: `1.5px solid ${C.mauve}`, boxShadow: "0 20px 60px rgba(13,13,13,0.08)", overflow: "hidden" }}>
+        <div style={{ backgroundColor: C.wine, height: 6 }} />
         <div style={{ padding: "40px 32px 32px", textAlign: "center" }}>
-          <div style={{ position: "absolute", top: 18, left: 14, width: 16, height: 16, borderTop: `1px solid ${C.gold}`, borderLeft: `1px solid ${C.gold}`, opacity: 0.6 }} aria-hidden="true" />
-          <div style={{ position: "absolute", top: 18, right: 14, width: 16, height: 16, borderTop: `1px solid ${C.gold}`, borderRight: `1px solid ${C.gold}`, opacity: 0.6 }} aria-hidden="true" />
+          <div style={{ position: "absolute", top: 20, left: 14, width: 16, height: 16, borderTop: `2px solid ${C.mauve}`, borderLeft: `2px solid ${C.mauve}` }} aria-hidden="true" />
+          <div style={{ position: "absolute", top: 20, right: 14, width: 16, height: 16, borderTop: `2px solid ${C.mauve}`, borderRight: `2px solid ${C.mauve}` }} aria-hidden="true" />
 
           <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: C.wine, textAlign: "center", marginBottom: 16 }}>
             Invitación de boda
@@ -68,7 +68,7 @@ function PaseTicket({ pases, nombre }: { pases: number; nombre: string }) {
             San Juan del Río, Querétaro
           </p>
         </div>
-        <div style={{ backgroundColor: C.wine, height: 4 }} />
+        <div style={{ backgroundColor: C.wine, height: 6 }} />
       </div>
     </div>
   );
@@ -182,11 +182,11 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
 
         {/* Ornament */}
         <div className="flex items-center gap-3 mb-10">
-          <div style={{ height: 1, width: 36, backgroundColor: C.gold, opacity: 0.4 }} />
-          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={C.mauve} opacity="0.8" />
+          <div style={{ height: 1.5, width: 36, backgroundColor: C.mauve, opacity: 0.55 }} />
+          <svg width="13" height="13" viewBox="0 0 10 10" fill="none">
+            <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={C.mauve} />
           </svg>
-          <div style={{ height: 1, width: 36, backgroundColor: C.gold, opacity: 0.4 }} />
+          <div style={{ height: 1.5, width: 36, backgroundColor: C.mauve, opacity: 0.55 }} />
         </div>
 
         <p style={{ fontFamily: "var(--font-heading)", fontWeight: 400, fontStyle: "italic", fontSize: "clamp(1rem, 4vw, 1.2rem)", color: C.charcoal, lineHeight: 1.75, marginBottom: 48, maxWidth: 320, textAlign: "center" }}>
@@ -206,9 +206,9 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
               onClick={() => handleSelect("yes")}
               style={{
                 ...btnBase,
-                backgroundColor: choice === "yes" ? C.black : "transparent",
+                backgroundColor: choice === "yes" ? C.wine : "transparent",
                 color: choice === "yes" ? C.white : C.charcoal,
-                border: `1px solid ${choice === "yes" ? C.black : C.border}`,
+                border: `1.5px solid ${choice === "yes" ? C.wine : C.border}`,
               }}
             >
               Asistiré
@@ -219,7 +219,7 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
                 ...btnBase,
                 backgroundColor: choice === "no" ? C.charcoal : "transparent",
                 color: choice === "no" ? C.white : C.charcoal,
-                border: `1px solid ${choice === "no" ? C.charcoal : C.border}`,
+                border: `1.5px solid ${choice === "no" ? C.charcoal : C.border}`,
               }}
             >
               No podré asistir
@@ -267,7 +267,7 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
           disabled={loading || frozen}
           style={{
             ...btnBase,
-            backgroundColor: C.black,
+            backgroundColor: C.wine,
             color: C.white,
             paddingLeft: `calc(40px + .28em)`,
           }}
