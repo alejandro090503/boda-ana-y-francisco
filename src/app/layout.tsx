@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://boda-ana-y-francisco.vercel.app/sobre-og.png?v=1",
+        url: "https://boda-ana-y-francisco.vercel.app/sobre-og.png?v=2",
         width: 1200,
         height: 630,
         alt: "Invitación de boda Ana Laura & Francisco — 10 Octubre 2026",
@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Ana Laura & Francisco — 10 Octubre 2026",
     description: "Nos casamos el 10 de octubre de 2026 en San Juan del Río, Querétaro.",
-    images: ["https://boda-ana-y-francisco.vercel.app/sobre-og.png?v=1"],
+    images: ["https://boda-ana-y-francisco.vercel.app/sobre-og.png?v=2"],
   },
 };
 
