@@ -9,8 +9,9 @@ const DEADLINE = new Date(2026, 7, 28, 23, 59, 59, 999);
 const C = {
   black: "#0D0D0D",
   wine: "#B02A31",
-  gold: "#E6974E",
-  goldLight: "#F0B878",
+  gold: "#C68A52",
+  goldLight: "#D9AE82",
+  mauve: "#9C6FA1",
   gray: "#6B6B6B",
   softGray: "#767676",
   charcoal: "#2C2C2C",
@@ -183,7 +184,7 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
         <div className="flex items-center gap-3 mb-10">
           <div style={{ height: 1, width: 36, backgroundColor: C.gold, opacity: 0.4 }} />
           <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-            <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={C.gold} opacity="0.55" />
+            <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={C.mauve} opacity="0.8" />
           </svg>
           <div style={{ height: 1, width: 36, backgroundColor: C.gold, opacity: 0.4 }} />
         </div>

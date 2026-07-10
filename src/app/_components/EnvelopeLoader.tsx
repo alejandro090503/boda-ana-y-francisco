@@ -154,7 +154,7 @@ export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
               height="28"
               viewBox="0 0 32 32"
               fill="none"
-              stroke="#E6974E"
+              stroke="#C68A52"
               strokeWidth="1.2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -171,7 +171,7 @@ export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
                 fontSize: 11,
                 letterSpacing: "0.3em",
                 textTransform: "uppercase",
-                color: "#E6974E",
+                color: "#C68A52",
               }}
             >
               Toca para abrir

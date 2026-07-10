@@ -3,14 +3,18 @@
 import { useEffect, useState } from "react";
 import { RSVPClient } from "./RSVPClient";
 
+/* Paleta del cliente, apagada para el sistema editorial (tonos vivos → sobrios):
+   #dece59→oliva, #79cc62→salvia, #e6974e→bronce, #bb63c2→malva, #b02a31→vino */
 const C = {
   black: "#0D0D0D",
   white: "#FFFFFF",
   wine: "#B02A31",       // vino — acento principal / textos de acento (viñedo Cava 57)
   wineDeep: "#8F2027",
-  gold: "#E6974E",       // ámbar viñedo — acentos decorativos (líneas, ornamentos, esquinas)
-  goldLight: "#F0B878",  // ámbar claro
-  grape: "#BB63C2",      // uva — toque sutil en gemas de divisores
+  gold: "#C68A52",       // ámbar/bronce apagado — hairlines/ornamentos/esquinas
+  goldLight: "#D9AE82",  // bronce claro
+  sage: "#7F9A6E",       // verde salvia apagado (de #79cc62)
+  olive: "#B3A85C",      // verde-oro oliva apagado (de #dece59)
+  mauve: "#9C6FA1",      // uva/malva apagado (de #bb63c2)
   charcoal: "#2C2C2C",
   gray: "#6B6B6B",
   softGray: "#767676",
@@ -91,13 +95,13 @@ function Countdown() {
   );
 }
 
-/* ─── Ornament ─── */
-function Ornament({ width = 100 }: { width?: number }) {
+/* ─── Ornament ─── (la gema central lleva el color de acento de cada sección) */
+function Ornament({ width = 100, tone = C.gold }: { width?: number; tone?: string }) {
   return (
     <div className="flex items-center justify-center gap-3 my-2">
       <div style={{ height: 1, width: width / 2, backgroundColor: C.gold, opacity: 0.45 }} />
       <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
-        <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={C.gold} opacity="0.55" />
+        <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={tone} opacity="0.75" />
       </svg>
       <div style={{ height: 1, width: width / 2, backgroundColor: C.gold, opacity: 0.45 }} />
     </div>
@@ -105,7 +109,7 @@ function Ornament({ width = 100 }: { width?: number }) {
 }
 
 /* ─── Section Divider entre secciones ─── */
-function Divider() {
+function Divider({ tone = C.mauve }: { tone?: string }) {
   return (
     <div
       className="flex items-center justify-center"
@@ -117,7 +121,7 @@ function Divider() {
     >
       <div style={{ height: 1, width: 56, backgroundColor: C.gold, opacity: 0.3 }} />
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true" className="mx-3">
-        <circle cx="12" cy="12" r="1.2" fill={C.grape} opacity="0.65" />
+        <circle cx="12" cy="12" r="1.2" fill={tone} opacity="0.8" />
         <circle cx="12" cy="12" r="4.5" stroke={C.gold} strokeWidth="0.5" opacity="0.4" />
       </svg>
       <div style={{ height: 1, width: 56, backgroundColor: C.gold, opacity: 0.3 }} />
@@ -302,7 +306,7 @@ function Section({
 }
 
 /* ─── Eyebrow + title group ─── */
-function SectionTitle({ eyebrow, title }: { eyebrow?: string; title: string }) {
+function SectionTitle({ eyebrow, title, tone }: { eyebrow?: string; title: string; tone?: string }) {
   return (
     <>
       {eyebrow && (
@@ -336,7 +340,7 @@ function SectionTitle({ eyebrow, title }: { eyebrow?: string; title: string }) {
         {title}
       </h2>
       <div style={{ marginBottom: 36 }}>
-        <Ornament width={100} />
+        <Ornament width={100} tone={tone} />
       </div>
     </>
   );
@@ -388,7 +392,7 @@ function Mensaje() {
 function Familias() {
   return (
     <Section style={{ paddingTop: 20 }}>
-      <SectionTitle title="NUESTROS PADRES" />
+      <SectionTitle title="NUESTROS PADRES" tone={C.sage} />
 
       <div
         style={{
@@ -434,7 +438,7 @@ function Familias() {
 
         <div className="flex flex-col items-center" style={{ gap: 8 }}>
           <div style={{ width: 1, height: 28, backgroundColor: C.border }} />
-          <svg width="8" height="8" viewBox="0 0 8 8" fill={C.gold}>
+          <svg width="8" height="8" viewBox="0 0 8 8" fill={C.sage} opacity="0.85">
             <path d="M4 0 L5 3 L8 4 L5 5 L4 8 L3 5 L0 4 L3 3 Z" />
           </svg>
           <div style={{ width: 1, height: 28, backgroundColor: C.border }} />
@@ -483,7 +487,7 @@ function Ceremonia() {
   return (
     <Section id="ceremonia">
       <div style={{ maxWidth: 460, margin: "0 auto" }}>
-        <SectionTitle eyebrow="Civil" title="CEREMONIA" />
+        <SectionTitle eyebrow="Civil" title="CEREMONIA" tone={C.wine} />
 
         <p
           style={{
@@ -761,7 +765,7 @@ function Itinerario() {
 
   return (
     <Section id="itinerario">
-      <SectionTitle title="ITINERARIO" />
+      <SectionTitle title="ITINERARIO" tone={C.olive} />
 
       <div style={{ maxWidth: 320, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
         {items.map((item, i) => (
@@ -854,7 +858,7 @@ function Hospedaje() {
 
   return (
     <Section id="hospedaje">
-      <SectionTitle title="HOSPEDAJE" />
+      <SectionTitle title="HOSPEDAJE" tone={C.mauve} />
 
       <p
         style={{
@@ -1177,7 +1181,7 @@ function AvisoNinos() {
 function MesaRegalos() {
   return (
     <Section id="regalos">
-      <SectionTitle title="MESA DE REGALOS" />
+      <SectionTitle title="MESA DE REGALOS" tone={C.gold} />
 
       <p
         style={{
@@ -1397,11 +1401,11 @@ export function InvitationClient({ pases, nombre }: { pases: number; nombre: str
       <Hospedaje />
       <PhotoDivider src="/recuerdos/foto-5.jpg" aspect="4 / 5" />
       <Vestimenta />
-      <Divider />
+      <Divider tone={C.olive} />
       <AvisoNinos />
       <PhotoDivider src="/recuerdos/foto-4.jpg" aspect="6 / 5" />
       <MesaRegalos />
-      <Divider />
+      <Divider tone={C.sage} />
       <RSVPClient pases={pases} nombre={nombre} />
       <Footer />
     </main>
