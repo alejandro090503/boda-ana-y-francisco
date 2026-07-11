@@ -352,6 +352,36 @@ function SectionTitle({ eyebrow, title, tone }: { eyebrow?: string; title: strin
 }
 
 /* ═══════════════════════════════════════════════════════
+   FRASE — cita romántica destacada
+   ═══════════════════════════════════════════════════════ */
+function Frase() {
+  return (
+    <Section style={{ paddingTop: 64, paddingBottom: 64 }}>
+      <div style={{ maxWidth: 520, margin: "0 auto" }}>
+        <Ornament width={70} tone={C.wine} />
+        <p
+          style={{
+            fontFamily: "var(--font-heading)",
+            fontWeight: 600,
+            fontStyle: "italic",
+            fontSize: "clamp(1.5rem, 6vw, 2.3rem)",
+            color: C.wine,
+            lineHeight: 1.5,
+            textAlign: "center",
+            margin: "28px 0",
+          }}
+        >
+          &ldquo;No fuiste antes ni después,
+          <br />
+          fuiste a tiempo para enamorarme de ti&rdquo;
+        </p>
+        <Ornament width={70} tone={C.wine} />
+      </div>
+    </Section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    MENSAJE
    ═══════════════════════════════════════════════════════ */
 function Mensaje() {
@@ -1424,6 +1454,7 @@ export function InvitationClient({ pases, nombre }: { pases: number; nombre: str
   return (
     <main style={{ backgroundColor: C.cream, width: "100%" }}>
       <Hero />
+      <Frase />
       <Mensaje />
       <Familias />
       {/* PhotoDivider fotos del template retiradas a petición del cliente — pendiente
