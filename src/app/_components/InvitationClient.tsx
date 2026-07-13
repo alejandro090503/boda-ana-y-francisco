@@ -266,8 +266,6 @@ function Hero() {
     <section
       className="flex flex-col items-center text-center"
       style={{
-        position: "relative",
-        overflow: "hidden",
         minHeight: "100vh",
         backgroundColor: "#FAFAF8",
         justifyContent: "center",
@@ -277,11 +275,8 @@ function Hero() {
         paddingRight: 24,
       }}
     >
-      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={170} opacity={0.85} drift={30} />
-      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={170} opacity={0.85} drift={30} />
-
       <motion.div
-        style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
         initial={reduce ? undefined : { opacity: 0, y: 24 }}
         animate={reduce ? undefined : { opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
@@ -492,10 +487,8 @@ function SectionTitle({ eyebrow, title, tone }: { eyebrow?: string; title: strin
    ═══════════════════════════════════════════════════════ */
 function Frase() {
   return (
-    <Section style={{ paddingTop: 88, paddingBottom: 88, position: "relative", overflow: "hidden" }}>
-      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={150} opacity={0.8} drift={38} />
-      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={150} opacity={0.8} drift={38} />
-      <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 520, margin: "0 auto" }}>
+    <Section style={{ paddingTop: 88, paddingBottom: 88 }}>
+      <Reveal style={{ maxWidth: 520, margin: "0 auto" }}>
         <RevealItem>
           <Ornament width={70} tone={C.wine} />
         </RevealItem>
@@ -1683,11 +1676,11 @@ export function InvitationClient({ pases, nombre }: { pases: number; nombre: str
       <Frase />
       <Mensaje />
       <Familias />
-      <FloralInterlude />
       {/* PhotoDivider fotos del template retiradas a petición del cliente — pendiente
           sustituir por fotos reales de Ana Laura & Francisco (ver props: src, aspect, tone) */}
       <Ceremonia />
       <Itinerario />
+      <FloralInterlude />
       <Hospedaje />
       <Vestimenta />
       <Divider tone={C.olive} />

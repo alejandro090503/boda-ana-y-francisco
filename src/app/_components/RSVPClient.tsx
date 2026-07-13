@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 
 const PANEL_API = "https://panel-invitados.vercel.app/api/confirmar";
 const RSVP_URL = "https://boda-ana-y-francisco.vercel.app";
@@ -20,39 +20,6 @@ const C = {
   cream: "#FAF8F5",
   white: "#FFFFFF",
 } as const;
-
-/* ─── Riel floral lateral con parallax de scroll (acuarela, no cubre el centro) ─── */
-function FloralSide({ src, side, width = 150, opacity = 0.85, drift = 40 }: { src: string; side: "left" | "right"; width?: number; opacity?: number; drift?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const y = useTransform(scrollYProgress, [0, 1], [drift, -drift]);
-
-  return (
-    <div
-      ref={ref}
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        top: 0,
-        bottom: 0,
-        left: side === "left" ? 0 : undefined,
-        right: side === "right" ? 0 : undefined,
-        width: `clamp(60px, 18vw, ${width}px)`,
-        pointerEvents: "none",
-        zIndex: 0,
-        overflow: "hidden",
-      }}
-    >
-      {reduce ? (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity }} />
-      ) : (
-        <motion.img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity, y }} />
-      )}
-    </div>
-  );
-}
 
 /* ─── Ticket ─── */
 function PaseTicket({ pases, nombre }: { pases: number; nombre: string }) {
@@ -204,10 +171,8 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
   };
 
   return (
-    <section id="rsvp" className="pt-36 pb-36 md:pt-52 md:pb-52 px-6 text-center" style={{ backgroundColor: C.cream, position: "relative", overflow: "hidden" }}>
-      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={150} opacity={0.75} drift={44} />
-      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={150} opacity={0.75} drift={44} />
-      <div className="max-w-md mx-auto flex flex-col items-center" style={{ position: "relative", zIndex: 1 }}>
+    <section id="rsvp" className="pt-36 pb-36 md:pt-52 md:pb-52 px-6 text-center" style={{ backgroundColor: C.cream }}>
+      <div className="max-w-md mx-auto flex flex-col items-center">
         {/* Eyebrow */}
         <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 11, letterSpacing: "0.28em", textTransform: "uppercase", color: C.wine, textAlign: "center", marginBottom: 16 }}>
           Confirmar asistencia
