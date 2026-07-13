@@ -493,8 +493,8 @@ function SectionTitle({ eyebrow, title, tone }: { eyebrow?: string; title: strin
 function Frase() {
   return (
     <Section style={{ paddingTop: 88, paddingBottom: 88, position: "relative", overflow: "hidden" }}>
-      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={150} opacity={0.8} drift={38} />
-      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={150} opacity={0.8} drift={38} />
+      <FloralSide src="/floral/rail-left-pink.webp" side="left" width={150} opacity={0.8} drift={38} />
+      <FloralSide src="/floral/rail-right-pink.webp" side="right" width={150} opacity={0.8} drift={38} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 520, margin: "0 auto" }}>
         <RevealItem>
           <Ornament width={70} tone={C.wine} />
@@ -701,8 +701,8 @@ function FloralInterlude() {
 function Ceremonia() {
   return (
     <Section id="ceremonia" style={{ position: "relative", overflow: "hidden" }}>
-      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={140} opacity={0.7} drift={36} />
-      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={140} opacity={0.7} drift={36} />
+      <FloralSide src="/floral/rail-left-meadow.webp" side="left" width={140} opacity={0.75} drift={36} />
+      <FloralSide src="/floral/rail-right-meadow.webp" side="right" width={140} opacity={0.75} drift={36} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 460, margin: "0 auto" }}>
         <RevealItem>
           <SectionTitle eyebrow="Civil" title="CEREMONIA" tone={C.wine} />
@@ -1448,7 +1448,7 @@ function AvisoNinos() {
 function MesaRegalos() {
   return (
     <Section id="regalos" style={{ position: "relative", overflow: "hidden" }}>
-      <FloralBand src="/floral/bottom-band.webp" height={210} opacity={0.55} />
+      <FloralBand src="/floral/bottom-band-cosmos.webp" height={240} opacity={0.5} />
       <div style={{ position: "relative", zIndex: 1 }}>
       <Reveal>
         <RevealItem>
