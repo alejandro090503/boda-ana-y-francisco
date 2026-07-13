@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform, useReducedMotion, type Variants } from "framer-motion";
 import { RSVPClient } from "./RSVPClient";
 
 /* Paleta del cliente, en tonos "piedra preciosa" de viñedo (vivos → ricos y editoriales,
@@ -135,13 +136,138 @@ function Divider({ tone = C.mauve }: { tone?: string }) {
 }
 
 /* ═══════════════════════════════════════════════════════
+   SISTEMA DE MOVIMIENTO — reveals escalonados con resorte físico
+   + rieles florales con parallax de scroll. Respeta prefers-reduced-motion.
+   ═══════════════════════════════════════════════════════ */
+const revealParent: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.14, delayChildren: 0.05 } },
+};
+const revealItem: Variants = {
+  hidden: { opacity: 0, y: 38, scale: 0.96 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 88, damping: 15, mass: 0.9 } },
+};
+
+/* Contenedor: dispara el stagger de sus RevealItem hijos al entrar en viewport */
+function Reveal({ children, className, style, ...rest }: { children: React.ReactNode; className?: string; style?: React.CSSProperties } & Record<string, unknown>) {
+  const reduce = useReducedMotion();
+  if (reduce) return <div className={className} style={style} {...rest}>{children}</div>;
+  return (
+    <motion.div
+      className={className}
+      style={style}
+      variants={revealParent}
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-90px" }}
+      {...rest}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* Hijo individual dentro de un Reveal — hereda el stagger del padre */
+function RevealItem({ children, style, ...rest }: { children: React.ReactNode; style?: React.CSSProperties } & Record<string, unknown>) {
+  const reduce = useReducedMotion();
+  if (reduce) return <div style={style} {...rest}>{children}</div>;
+  return (
+    <motion.div variants={revealItem} style={style} {...rest}>
+      {children}
+    </motion.div>
+  );
+}
+
+/* Riel floral vertical (acuarela) a un costado — deriva y rota sutilmente con el scroll,
+   nunca cubre el centro donde vive el contenido. */
+function FloralSide({
+  src,
+  side,
+  width = 150,
+  opacity = 0.9,
+  drift = 46,
+}: {
+  src: string;
+  side: "left" | "right";
+  width?: number;
+  opacity?: number;
+  drift?: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [drift, -drift]);
+  const rotate = useTransform(scrollYProgress, [0, 1], side === "left" ? [-2.2, 2.2] : [2.2, -2.2]);
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        left: side === "left" ? 0 : undefined,
+        right: side === "right" ? 0 : undefined,
+        width: `clamp(64px, 20vw, ${width}px)`,
+        pointerEvents: "none",
+        zIndex: 0,
+        overflow: "hidden",
+      }}
+    >
+      {reduce ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity }} />
+      ) : (
+        <motion.img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", opacity, y, rotate }} />
+      )}
+    </div>
+  );
+}
+
+/* Banda floral horizontal — crece desde el borde inferior de una sección, con leve parallax. */
+function FloralBand({ src, height = 230, opacity = 0.95 }: { src: string; height?: number; opacity?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [26, -14]);
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: `clamp(150px, 26vw, ${height}px)`,
+        pointerEvents: "none",
+        zIndex: 0,
+        overflow: "hidden",
+      }}
+    >
+      {reduce ? (
+        /* eslint-disable-next-line @next/next/no-img-element */
+        <img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "bottom", opacity }} />
+      ) : (
+        <motion.img src={src} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "bottom", opacity, y }} />
+      )}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
    HERO
    ═══════════════════════════════════════════════════════ */
 function Hero() {
+  const reduce = useReducedMotion();
   return (
     <section
       className="flex flex-col items-center text-center"
       style={{
+        position: "relative",
+        overflow: "hidden",
         minHeight: "100vh",
         backgroundColor: "#FAFAF8",
         justifyContent: "center",
@@ -151,6 +277,15 @@ function Hero() {
         paddingRight: 24,
       }}
     >
+      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={170} opacity={0.85} drift={30} />
+      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={170} opacity={0.85} drift={30} />
+
+      <motion.div
+        style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}
+        initial={reduce ? undefined : { opacity: 0, y: 24 }}
+        animate={reduce ? undefined : { opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+      >
       {/* Nombres apilados */}
       <h1
         style={{
@@ -276,6 +411,7 @@ function Hero() {
       </p>
 
       <Countdown />
+      </motion.div>
     </section>
   );
 }
@@ -356,27 +492,35 @@ function SectionTitle({ eyebrow, title, tone }: { eyebrow?: string; title: strin
    ═══════════════════════════════════════════════════════ */
 function Frase() {
   return (
-    <Section style={{ paddingTop: 64, paddingBottom: 64 }}>
-      <div style={{ maxWidth: 520, margin: "0 auto" }}>
-        <Ornament width={70} tone={C.wine} />
-        <p
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontWeight: 600,
-            fontStyle: "italic",
-            fontSize: "clamp(1.5rem, 6vw, 2.3rem)",
-            color: C.wine,
-            lineHeight: 1.5,
-            textAlign: "center",
-            margin: "28px 0",
-          }}
-        >
-          &ldquo;No fuiste antes ni después,
-          <br />
-          fuiste a tiempo para enamorarme de ti&rdquo;
-        </p>
-        <Ornament width={70} tone={C.wine} />
-      </div>
+    <Section style={{ paddingTop: 88, paddingBottom: 88, position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={150} opacity={0.8} drift={38} />
+      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={150} opacity={0.8} drift={38} />
+      <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 520, margin: "0 auto" }}>
+        <RevealItem>
+          <Ornament width={70} tone={C.wine} />
+        </RevealItem>
+        <RevealItem style={{ margin: "28px 0" }}>
+          <p
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontWeight: 600,
+              fontStyle: "italic",
+              fontSize: "clamp(1.5rem, 6vw, 2.3rem)",
+              color: C.wine,
+              lineHeight: 1.5,
+              textAlign: "center",
+              margin: 0,
+            }}
+          >
+            &ldquo;No fuiste antes ni después,
+            <br />
+            fuiste a tiempo para enamorarme de ti&rdquo;
+          </p>
+        </RevealItem>
+        <RevealItem>
+          <Ornament width={70} tone={C.wine} />
+        </RevealItem>
+      </Reveal>
     </Section>
   );
 }
@@ -387,36 +531,40 @@ function Frase() {
 function Mensaje() {
   return (
     <Section style={{ paddingBottom: 20 }}>
-      <div style={{ maxWidth: 460, margin: "0 auto" }}>
-        <p
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontWeight: 400,
-            fontStyle: "italic",
-            fontSize: "clamp(1.05rem, 4vw, 1.25rem)",
-            color: C.charcoal,
-            lineHeight: 1.9,
-            textAlign: "center",
-          }}
-        >
-          La vida nos concedió el privilegio tan grande de conocernos y amarnos,
-          y hoy queremos unir nuestras vidas para siempre
-        </p>
-        <p
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontStyle: "italic",
-            fontWeight: 400,
-            fontSize: "clamp(1.05rem, 4vw, 1.25rem)",
-            color: C.wine,
-            lineHeight: 1.9,
-            textAlign: "center",
-            marginTop: 18,
-          }}
-        >
-          En compañía de
-        </p>
-      </div>
+      <Reveal style={{ maxWidth: 460, margin: "0 auto" }}>
+        <RevealItem>
+          <p
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontWeight: 400,
+              fontStyle: "italic",
+              fontSize: "clamp(1.05rem, 4vw, 1.25rem)",
+              color: C.charcoal,
+              lineHeight: 1.9,
+              textAlign: "center",
+            }}
+          >
+            La vida nos concedió el privilegio tan grande de conocernos y amarnos,
+            y hoy queremos unir nuestras vidas para siempre
+          </p>
+        </RevealItem>
+        <RevealItem style={{ marginTop: 18 }}>
+          <p
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontStyle: "italic",
+              fontWeight: 400,
+              fontSize: "clamp(1.05rem, 4vw, 1.25rem)",
+              color: C.wine,
+              lineHeight: 1.9,
+              textAlign: "center",
+              margin: 0,
+            }}
+          >
+            En compañía de
+          </p>
+        </RevealItem>
+      </Reveal>
     </Section>
   );
 }
@@ -427,9 +575,11 @@ function Mensaje() {
 function Familias() {
   return (
     <Section style={{ paddingTop: 20 }}>
-      <SectionTitle title="NUESTROS PADRES" tone={C.sage} />
+      <RevealItem>
+        <SectionTitle title="NUESTROS PADRES" tone={C.sage} />
+      </RevealItem>
 
-      <div
+      <Reveal
         style={{
           maxWidth: 520,
           margin: "0 auto",
@@ -440,7 +590,7 @@ function Familias() {
         }}
       >
         {/* Novia */}
-        <div style={{ textAlign: "center" }}>
+        <RevealItem style={{ textAlign: "center" }}>
           <p
             style={{
               fontFamily: "var(--font-body)",
@@ -469,8 +619,9 @@ function Familias() {
             <br />
             Óscar Mendoza Monroy <span style={{ fontSize: 13, color: C.softGray }}>(Q.E.P.D.)</span>
           </p>
-        </div>
+        </RevealItem>
 
+        <RevealItem>
         <div className="flex flex-col items-center" style={{ gap: 8 }}>
           <div style={{ width: 1, height: 28, backgroundColor: C.border }} />
           <svg width="8" height="8" viewBox="0 0 8 8" fill={C.sage} opacity="0.85">
@@ -478,9 +629,10 @@ function Familias() {
           </svg>
           <div style={{ width: 1, height: 28, backgroundColor: C.border }} />
         </div>
+        </RevealItem>
 
         {/* Novio */}
-        <div style={{ textAlign: "center" }}>
+        <RevealItem style={{ textAlign: "center" }}>
           <p
             style={{
               fontFamily: "var(--font-body)",
@@ -509,9 +661,37 @@ function Familias() {
             <br />
             Francisco Montes Caballero
           </p>
-        </div>
-      </div>
+        </RevealItem>
+      </Reveal>
     </Section>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   FLORAL INTERLUDE — pausa ornamental entre Padres y Ceremonia
+   ═══════════════════════════════════════════════════════ */
+function FloralInterlude() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        backgroundColor: C.cream,
+        height: "clamp(210px, 32vw, 320px)",
+      }}
+    >
+      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={180} opacity={0.95} drift={54} />
+      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={180} opacity={0.95} drift={54} />
+      <Reveal
+        className="flex items-center justify-center"
+        style={{ position: "relative", zIndex: 1, height: "100%" }}
+      >
+        <RevealItem>
+          <Ornament width={90} tone={C.mauve} />
+        </RevealItem>
+      </Reveal>
+    </div>
   );
 }
 
@@ -521,10 +701,12 @@ function Familias() {
 function Ceremonia() {
   return (
     <Section id="ceremonia">
-      <div style={{ maxWidth: 460, margin: "0 auto" }}>
-        <SectionTitle eyebrow="Civil" title="CEREMONIA" tone={C.wine} />
+      <Reveal style={{ maxWidth: 460, margin: "0 auto" }}>
+        <RevealItem>
+          <SectionTitle eyebrow="Civil" title="CEREMONIA" tone={C.wine} />
+        </RevealItem>
 
-        <div
+        <RevealItem
           style={{
             borderLeft: `3px solid ${C.wine}`,
             backgroundColor: "rgba(176,42,49,0.05)",
@@ -576,8 +758,9 @@ function Ceremonia() {
             <br />
             San Juan del Río, Querétaro
           </p>
-        </div>
+        </RevealItem>
 
+        <RevealItem>
         <a
           href="https://www.google.com/maps/search/?api=1&query=Cava+57+San+Juan+del+R%C3%ADo+Quer%C3%A9taro"
           target="_blank"
@@ -603,7 +786,8 @@ function Ceremonia() {
           </svg>
           Ver ubicación
         </a>
-      </div>
+        </RevealItem>
+      </Reveal>
     </Section>
   );
 }
@@ -814,65 +998,74 @@ function Itinerario() {
 
   return (
     <Section id="itinerario">
-      <SectionTitle title="ITINERARIO" tone={C.olive} />
+      <RevealItem>
+        <SectionTitle title="ITINERARIO" tone={C.olive} />
+      </RevealItem>
 
       <div style={{ maxWidth: 320, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
         {items.map((item, i) => (
-          <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-            {/* Icono sketch coloreado */}
-            <div style={{ opacity: item.confirmed ? 1 : 0.35 }}>
-              {item.icon}
-            </div>
+          /* Cada momento dispara su propia animación al entrar en viewport — efecto de
+             revelado en cadena bajando por el itinerario, no todo junto. */
+          <Reveal key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+            <RevealItem style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+              {/* Icono sketch coloreado */}
+              <div style={{ opacity: item.confirmed ? 1 : 0.35 }}>
+                {item.icon}
+              </div>
 
-            {/* Nombre evento */}
-            <p
-              style={{
-                fontFamily: "var(--font-heading)",
-                fontWeight: 700,
-                fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
-                letterSpacing: "0.08em",
-                color: item.tone,
-                textAlign: "center",
-                marginTop: 8,
-                marginBottom: 6,
-                opacity: item.confirmed ? 1 : 0.4,
-              }}
-            >
-              {item.evento}
-            </p>
+              {/* Nombre evento */}
+              <p
+                style={{
+                  fontFamily: "var(--font-heading)",
+                  fontWeight: 700,
+                  fontSize: "clamp(1.6rem, 7vw, 2.4rem)",
+                  letterSpacing: "0.08em",
+                  color: item.tone,
+                  textAlign: "center",
+                  marginTop: 8,
+                  marginBottom: 6,
+                  opacity: item.confirmed ? 1 : 0.4,
+                }}
+              >
+                {item.evento}
+              </p>
 
-            {/* Hora */}
-            <p
-              style={{
-                fontFamily: "var(--font-body)",
-                fontWeight: 400,
-                fontSize: 15,
-                color: item.confirmed ? C.charcoal : C.softGray,
-                fontStyle: item.confirmed ? "normal" : "italic",
-                textAlign: "center",
-                letterSpacing: "0.04em",
-              }}
-            >
-              {item.hora}
-            </p>
+              {/* Hora */}
+              <p
+                style={{
+                  fontFamily: "var(--font-body)",
+                  fontWeight: 400,
+                  fontSize: 15,
+                  color: item.confirmed ? C.charcoal : C.softGray,
+                  fontStyle: item.confirmed ? "normal" : "italic",
+                  textAlign: "center",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                {item.hora}
+              </p>
 
-            {/* Extra (dirección / mapa) */}
-            {item.extra && item.extra}
+              {/* Extra (dirección / mapa) */}
+              {item.extra && item.extra}
+            </RevealItem>
 
-            {/* Línea conectora vertical — hereda el color del siguiente momento (hilo de la paleta) */}
+            {/* Línea conectora vertical — hereda el color del siguiente momento (hilo de la paleta),
+                se dibuja de arriba hacia abajo al revelarse */}
             {i < items.length - 1 && (
-              <div
+              <motion.div
                 aria-hidden="true"
+                variants={{ hidden: { scaleY: 0 }, show: { scaleY: 1, transition: { duration: 0.5, ease: "easeOut", delay: 0.15 } } }}
                 style={{
                   width: 2,
                   height: 52,
                   backgroundColor: items[i + 1].tone,
                   opacity: 0.5,
                   margin: "20px auto",
+                  transformOrigin: "top",
                 }}
               />
             )}
-          </div>
+          </Reveal>
         ))}
       </div>
     </Section>
@@ -907,23 +1100,29 @@ function Hospedaje() {
 
   return (
     <Section id="hospedaje">
-      <SectionTitle title="HOSPEDAJE" tone={C.mauve} />
+      <Reveal>
+        <RevealItem>
+          <SectionTitle title="HOSPEDAJE" tone={C.mauve} />
+        </RevealItem>
 
-      <p
-        style={{
-          fontFamily: "var(--font-heading)",
-          fontStyle: "italic",
-          fontWeight: 400,
-          fontSize: 17,
-          color: C.gray,
-          lineHeight: 1.7,
-          textAlign: "center",
-          maxWidth: 360,
-          margin: "0 auto 48px",
-        }}
-      >
-        Hemos seleccionado opciones de hospedaje cercanas para tu comodidad.
-      </p>
+        <RevealItem>
+          <p
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontStyle: "italic",
+              fontWeight: 400,
+              fontSize: 17,
+              color: C.gray,
+              lineHeight: 1.7,
+              textAlign: "center",
+              maxWidth: 360,
+              margin: "0 auto 48px",
+            }}
+          >
+            Hemos seleccionado opciones de hospedaje cercanas para tu comodidad.
+          </p>
+        </RevealItem>
+      </Reveal>
 
       <div
         style={{
@@ -937,8 +1136,8 @@ function Hospedaje() {
         }}
       >
         {hoteles.map((h) => (
-          <div
-            key={h.nombre}
+          <Reveal key={h.nombre} style={{ width: "100%" }}>
+          <RevealItem
             style={{
               position: "relative",
               width: "100%",
@@ -1037,7 +1236,8 @@ function Hospedaje() {
 
             {/* Cinta ciruela inferior */}
             <div style={{ height: 3, backgroundColor: C.mauve, opacity: 0.6 }} />
-          </div>
+          </RevealItem>
+          </Reveal>
         ))}
       </div>
     </Section>
@@ -1050,7 +1250,8 @@ function Hospedaje() {
 function Vestimenta() {
   return (
     <Section>
-      <div style={{ maxWidth: 360, margin: "0 auto" }}>
+      <Reveal style={{ maxWidth: 360, margin: "0 auto" }}>
+        <RevealItem>
         <h2
           style={{
             fontFamily: "var(--font-heading)",
@@ -1065,9 +1266,11 @@ function Vestimenta() {
         >
           VESTIMENTA
         </h2>
+        </RevealItem>
 
         {/* Siluetas elegantes — referencia editorial */}
-        <div
+        <RevealItem
+          aria-hidden="true"
           style={{
             display: "flex",
             alignItems: "flex-end",
@@ -1075,7 +1278,6 @@ function Vestimenta() {
             gap: 36,
             margin: "0 auto 32px",
           }}
-          aria-hidden="true"
         >
           {/* Dama — vestido mermaid con escote corazón */}
           <svg width="68" height="195" viewBox="0 0 80 200">
@@ -1120,8 +1322,9 @@ function Vestimenta() {
             {/* Moño — nudo central */}
             <rect fill={C.black} x="66" y="13" width="8" height="16" rx="1" />
           </svg>
-        </div>
+        </RevealItem>
 
+        <RevealItem>
         <p
           style={{
             fontFamily: "var(--font-heading)",
@@ -1150,9 +1353,11 @@ function Vestimenta() {
         >
           Damas: vestido largo · Caballeros: traje
         </p>
+        </RevealItem>
 
         <div aria-hidden="true" style={{ height: 1, width: 40, background: `linear-gradient(90deg, transparent, ${C.gold}, transparent)`, margin: "24px auto 18px" }} />
 
+        <RevealItem>
         <p
           style={{
             fontFamily: "var(--font-body)",
@@ -1178,7 +1383,8 @@ function Vestimenta() {
             </div>
           ))}
         </div>
-      </div>
+        </RevealItem>
+      </Reveal>
     </Section>
   );
 }
@@ -1189,7 +1395,8 @@ function Vestimenta() {
 function AvisoNinos() {
   return (
     <Section>
-      <div style={{ maxWidth: 360, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+      <Reveal style={{ maxWidth: 360, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+        <RevealItem>
         <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke={C.softGray} strokeWidth="1.4" aria-hidden="true">
           <circle cx="16" cy="8" r="4" />
           <path d="M8 28 Q8 18 16 18 Q24 18 24 28" />
@@ -1207,6 +1414,8 @@ function AvisoNinos() {
         >
           NO NIÑOS
         </p>
+        </RevealItem>
+        <RevealItem>
         <p
           style={{
             fontFamily: "var(--font-heading)",
@@ -1221,7 +1430,8 @@ function AvisoNinos() {
         >
           Con cariño, celebraremos como un evento solo para adultos. Gracias por comprenderlo.
         </p>
-      </div>
+        </RevealItem>
+      </Reveal>
     </Section>
   );
 }
@@ -1231,24 +1441,32 @@ function AvisoNinos() {
    ═══════════════════════════════════════════════════════ */
 function MesaRegalos() {
   return (
-    <Section id="regalos">
-      <SectionTitle title="MESA DE REGALOS" tone={C.gold} />
+    <Section id="regalos" style={{ position: "relative", overflow: "hidden" }}>
+      <FloralBand src="/floral/bottom-band.webp" height={210} opacity={0.55} />
+      <div style={{ position: "relative", zIndex: 1 }}>
+      <Reveal>
+        <RevealItem>
+          <SectionTitle title="MESA DE REGALOS" tone={C.gold} />
+        </RevealItem>
 
-      <p
-        style={{
-          fontFamily: "var(--font-heading)",
-          fontStyle: "italic",
-          fontWeight: 400,
-          fontSize: 16,
-          color: C.gray,
-          lineHeight: 1.75,
-          textAlign: "center",
-          maxWidth: 380,
-          margin: "0 auto 48px",
-        }}
-      >
-        Nuestro mejor regalo es tu presencia, pero si deseas tener un detalle con nosotros puedes hacerlo a través de:
-      </p>
+        <RevealItem>
+          <p
+            style={{
+              fontFamily: "var(--font-heading)",
+              fontStyle: "italic",
+              fontWeight: 400,
+              fontSize: 16,
+              color: C.gray,
+              lineHeight: 1.75,
+              textAlign: "center",
+              maxWidth: 380,
+              margin: "0 auto 48px",
+            }}
+          >
+            Nuestro mejor regalo es tu presencia, pero si deseas tener un detalle con nosotros puedes hacerlo a través de:
+          </p>
+        </RevealItem>
+      </Reveal>
 
       <div
         style={{
@@ -1259,13 +1477,13 @@ function MesaRegalos() {
         }}
       >
         {/* Santander */}
-        <div
+        <Reveal style={{ width: "100%", maxWidth: 320 }}>
+        <RevealItem
           style={{
             backgroundColor: C.white,
             border: `1px solid ${C.border}`,
             borderTop: "none",
             width: "100%",
-            maxWidth: 320,
             textAlign: "center",
             overflow: "hidden",
           }}
@@ -1365,7 +1583,9 @@ function MesaRegalos() {
             014680566622982430
           </p>
           </div>
-        </div>
+        </RevealItem>
+        </Reveal>
+      </div>
       </div>
     </Section>
   );
@@ -1386,63 +1606,69 @@ function Footer() {
         paddingRight: 24,
       }}
     >
-      {/* Firma de paleta — los 5 colores de la boda, como swatch editorial */}
-      <div aria-hidden="true" style={{ display: "flex", width: "100%", height: 6, marginBottom: 56 }}>
-        {[C.oliveLight, C.sage, C.goldLight, C.mauve, C.wine].map((c) => (
-          <div key={c} style={{ flex: 1, backgroundColor: c }} />
-        ))}
-      </div>
+      <Reveal>
+        {/* Firma de paleta — los 5 colores de la boda, como swatch editorial */}
+        <RevealItem aria-hidden="true" style={{ display: "flex", width: "100%", height: 6, marginBottom: 56 }}>
+          {[C.oliveLight, C.sage, C.goldLight, C.mauve, C.wine].map((c) => (
+            <div key={c} style={{ flex: 1, backgroundColor: c }} />
+          ))}
+        </RevealItem>
 
-      <p
-        aria-hidden="true"
-        style={{
-          fontFamily: "var(--font-script)",
-          color: C.white,
-          fontSize: "clamp(2.6rem, 9vw, 4.4rem)",
-          lineHeight: 1,
-          textAlign: "center",
-        }}
-      >
-        A &amp; F
-      </p>
+        <RevealItem>
+          <p
+            aria-hidden="true"
+            style={{
+              fontFamily: "var(--font-script)",
+              color: C.white,
+              fontSize: "clamp(2.6rem, 9vw, 4.4rem)",
+              lineHeight: 1,
+              textAlign: "center",
+            }}
+          >
+            A &amp; F
+          </p>
+        </RevealItem>
 
-      <div
-        style={{
-          height: 1,
-          width: 36,
-          backgroundColor: "rgba(255,255,255,0.25)",
-          margin: "24px auto",
-        }}
-      />
+        <div
+          style={{
+            height: 1,
+            width: 36,
+            backgroundColor: "rgba(255,255,255,0.25)",
+            margin: "24px auto",
+          }}
+        />
 
-      <p
-        style={{
-          fontFamily: "var(--font-body)",
-          fontWeight: 500,
-          fontSize: 11,
-          letterSpacing: "0.22em",
-          textTransform: "uppercase",
-          color: C.white,
-          textAlign: "center",
-        }}
-      >
-        10 · Octubre · 2026
-      </p>
+        <RevealItem>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontWeight: 500,
+              fontSize: 11,
+              letterSpacing: "0.22em",
+              textTransform: "uppercase",
+              color: C.white,
+              textAlign: "center",
+            }}
+          >
+            10 · Octubre · 2026
+          </p>
 
-      <p
-        style={{
-          fontFamily: "var(--font-body)",
-          fontWeight: 500,
-          fontSize: 10,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          color: "rgba(255,255,255,0.5)",
-          textAlign: "center",
-          marginTop: 14,
-        }}
-      >
-        @elysium.invitaciones
-      </p>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontWeight: 500,
+              fontSize: 10,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: "rgba(255,255,255,0.5)",
+              textAlign: "center",
+              marginTop: 14,
+            }}
+          >
+            @elysium.invitaciones
+          </p>
+        </RevealItem>
+      </Reveal>
     </section>
   );
 }
@@ -1457,6 +1683,7 @@ export function InvitationClient({ pases, nombre }: { pases: number; nombre: str
       <Frase />
       <Mensaje />
       <Familias />
+      <FloralInterlude />
       {/* PhotoDivider fotos del template retiradas a petición del cliente — pendiente
           sustituir por fotos reales de Ana Laura & Francisco (ver props: src, aspect, tone) */}
       <Ceremonia />
