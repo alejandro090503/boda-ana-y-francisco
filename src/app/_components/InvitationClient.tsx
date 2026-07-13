@@ -266,8 +266,10 @@ function Hero() {
     <section
       className="flex flex-col items-center text-center"
       style={{
+        position: "relative",
+        overflow: "hidden",
         minHeight: "100vh",
-        backgroundColor: "#FAFAF8",
+        backgroundColor: C.cream,
         justifyContent: "center",
         paddingTop: "clamp(56px, 10vh, 88px)",
         paddingBottom: "clamp(48px, 8vh, 80px)",
@@ -275,8 +277,11 @@ function Hero() {
         paddingRight: 24,
       }}
     >
+      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={170} opacity={0.85} drift={30} />
+      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={170} opacity={0.85} drift={30} />
+
       <motion.div
-        style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+        style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}
         initial={reduce ? undefined : { opacity: 0, y: 24 }}
         animate={reduce ? undefined : { opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
@@ -487,8 +492,10 @@ function SectionTitle({ eyebrow, title, tone }: { eyebrow?: string; title: strin
    ═══════════════════════════════════════════════════════ */
 function Frase() {
   return (
-    <Section style={{ paddingTop: 88, paddingBottom: 88 }}>
-      <Reveal style={{ maxWidth: 520, margin: "0 auto" }}>
+    <Section style={{ paddingTop: 88, paddingBottom: 88, position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={150} opacity={0.8} drift={38} />
+      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={150} opacity={0.8} drift={38} />
+      <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 520, margin: "0 auto" }}>
         <RevealItem>
           <Ornament width={70} tone={C.wine} />
         </RevealItem>
@@ -693,8 +700,10 @@ function FloralInterlude() {
    ═══════════════════════════════════════════════════════ */
 function Ceremonia() {
   return (
-    <Section id="ceremonia">
-      <Reveal style={{ maxWidth: 460, margin: "0 auto" }}>
+    <Section id="ceremonia" style={{ position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={140} opacity={0.7} drift={36} />
+      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={140} opacity={0.7} drift={36} />
+      <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 460, margin: "0 auto" }}>
         <RevealItem>
           <SectionTitle eyebrow="Civil" title="CEREMONIA" tone={C.wine} />
         </RevealItem>
@@ -1092,8 +1101,10 @@ function Hospedaje() {
   ];
 
   return (
-    <Section id="hospedaje">
-      <Reveal>
+    <Section id="hospedaje" style={{ position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={130} opacity={0.65} drift={32} />
+      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={130} opacity={0.65} drift={32} />
+      <Reveal style={{ position: "relative", zIndex: 1 }}>
         <RevealItem>
           <SectionTitle title="HOSPEDAJE" tone={C.mauve} />
         </RevealItem>
@@ -1242,8 +1253,10 @@ function Hospedaje() {
    ═══════════════════════════════════════════════════════ */
 function Vestimenta() {
   return (
-    <Section>
-      <Reveal style={{ maxWidth: 360, margin: "0 auto" }}>
+    <Section style={{ position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={120} opacity={0.6} drift={28} />
+      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={120} opacity={0.6} drift={28} />
+      <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 360, margin: "0 auto" }}>
         <RevealItem>
         <h2
           style={{
