@@ -958,21 +958,21 @@ function Itinerario() {
       hora: "4:00 p.m.",
       evento: "CEREMONIA",
       tone: C.wine,
-      icon: <IconRings tone={C.wine} />,
+      icon: <img src="/icons/icon-ceremonia.webp" alt="" width={72} height={72} style={{ objectFit: "contain" }} aria-hidden="true" />,
     },
     {
       confirmed: true,
       hora: "5:00 p.m.",
       evento: "CÓCTEL",
       tone: C.gold,
-      icon: <IconCoctel tone={C.gold} />,
+      icon: <img src="/icons/icon-coctel.webp" alt="" width={72} height={72} style={{ objectFit: "contain" }} aria-hidden="true" />,
     },
     {
       confirmed: true,
       hora: "5:30 p.m.",
       evento: "RECEPCIÓN",
       tone: C.olive,
-      icon: <IconRecepcion tone={C.olive} />,
+      icon: <img src="/icons/icon-recepcion.webp" alt="" width={72} height={72} style={{ objectFit: "contain" }} aria-hidden="true" />,
       extra: (
         <div style={{ marginTop: 10 }}>
           <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 14, color: C.gray, textAlign: "center", marginBottom: 10 }}>
@@ -993,9 +993,9 @@ function Itinerario() {
         </div>
       ),
     },
-    { confirmed: true,  hora: "6:00 p.m.",      evento: "CENA",       tone: C.sage,  icon: <IconCena tone={C.sage} /> },
-    { confirmed: true,  hora: "7:30 p.m.",      evento: "FIESTA",     tone: C.mauve, icon: <IconBaile tone={C.mauve} /> },
-    { confirmed: true,  hora: "1:00 a.m.",      evento: "DESPEDIDA",  tone: C.wine,  icon: <IconDespedida tone={C.wine} /> },
+    { confirmed: true,  hora: "6:00 p.m.",      evento: "CENA",       tone: C.sage,  icon: <img src="/icons/icon-cena.webp" alt="" width={72} height={72} style={{ objectFit: "contain" }} aria-hidden="true" /> },
+    { confirmed: true,  hora: "7:30 p.m.",      evento: "FIESTA",     tone: C.mauve, icon: <img src="/icons/icon-fiesta.webp" alt="" width={72} height={72} style={{ objectFit: "contain" }} aria-hidden="true" /> },
+    { confirmed: true,  hora: "1:00 a.m.",      evento: "DESPEDIDA",  tone: C.wine,  icon: <img src="/icons/icon-despedida.webp" alt="" width={72} height={72} style={{ objectFit: "contain" }} aria-hidden="true" /> },
   ];
 
   return (
