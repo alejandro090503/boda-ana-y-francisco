@@ -257,6 +257,25 @@ function FloralBand({ src, height = 230, opacity = 0.95 }: { src: string; height
   );
 }
 
+function SectionBg({ src, opacity = 0.55 }: { src: string; opacity?: number }) {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        pointerEvents: "none",
+        zIndex: 0,
+        backgroundImage: `url(${src})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        opacity,
+      }}
+    />
+  );
+}
+
 /* ═══════════════════════════════════════════════════════
    HERO
    ═══════════════════════════════════════════════════════ */
@@ -493,6 +512,7 @@ function SectionTitle({ eyebrow, title, tone }: { eyebrow?: string; title: strin
 function Frase() {
   return (
     <Section style={{ paddingTop: 88, paddingBottom: 88, position: "relative", overflow: "hidden" }}>
+      <SectionBg src="/floral/bg-frase.webp" opacity={0.45} />
       <FloralSide src="/floral/rail-left-pink.webp" side="left" width={150} opacity={0.8} drift={38} />
       <FloralSide src="/floral/rail-right-pink.webp" side="right" width={150} opacity={0.8} drift={38} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 520, margin: "0 auto" }}>
@@ -575,6 +595,7 @@ function Mensaje() {
 function Familias() {
   return (
     <Section style={{ paddingTop: 20, position: "relative", overflow: "hidden" }}>
+      <SectionBg src="/floral/bg-familias.webp" opacity={0.35} />
       <FloralSide src="/floral/rail-left-meadow.webp" side="left" width={110} opacity={0.5} drift={26} />
       <FloralSide src="/floral/rail-right-meadow.webp" side="right" width={110} opacity={0.5} drift={26} />
       <RevealItem style={{ position: "relative", zIndex: 1 }}>
@@ -705,6 +726,7 @@ function FloralInterlude() {
 function Ceremonia() {
   return (
     <Section id="ceremonia" style={{ position: "relative", overflow: "hidden" }}>
+      <SectionBg src="/floral/bg-ceremonia.webp" opacity={0.4} />
       <FloralSide src="/floral/rail-left-meadow.webp" side="left" width={155} opacity={0.8} drift={36} />
       <FloralSide src="/floral/rail-right-meadow.webp" side="right" width={155} opacity={0.8} drift={36} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 460, margin: "0 auto" }}>
@@ -1004,6 +1026,7 @@ function Itinerario() {
 
   return (
     <Section id="itinerario" style={{ position: "relative", overflow: "hidden" }}>
+      <SectionBg src="/floral/bg-itinerario.webp" opacity={0.35} />
       <FloralSide src="/floral/rail-left-pink.webp" side="left" width={130} opacity={0.55} drift={40} />
       <FloralSide src="/floral/rail-right-pink.webp" side="right" width={130} opacity={0.55} drift={40} />
       <RevealItem style={{ position: "relative", zIndex: 1 }}>
@@ -1108,6 +1131,7 @@ function Hospedaje() {
 
   return (
     <Section id="hospedaje" style={{ position: "relative", overflow: "hidden" }}>
+      <SectionBg src="/floral/bg-hospedaje.webp" opacity={0.4} />
       <FloralSide src="/floral/rail-left-rose.webp" side="left" width={145} opacity={0.75} drift={32} />
       <FloralSide src="/floral/rail-right-rose.webp" side="right" width={145} opacity={0.75} drift={32} />
       <Reveal style={{ position: "relative", zIndex: 1 }}>
@@ -1260,6 +1284,7 @@ function Hospedaje() {
 function Vestimenta() {
   return (
     <Section style={{ position: "relative", overflow: "hidden" }}>
+      <SectionBg src="/floral/bg-vestimenta.webp" opacity={0.4} />
       <FloralSide src="/floral/rail-left-wild.webp" side="left" width={140} opacity={0.7} drift={28} />
       <FloralSide src="/floral/rail-right-wild.webp" side="right" width={140} opacity={0.7} drift={28} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 360, margin: "0 auto" }}>
@@ -1456,6 +1481,7 @@ function AvisoNinos() {
 function MesaRegalos() {
   return (
     <Section id="regalos" style={{ position: "relative", overflow: "hidden" }}>
+      <SectionBg src="/floral/bg-vestimenta.webp" opacity={0.35} />
       <FloralSide src="/floral/rail-left-rose.webp" side="left" width={120} opacity={0.55} drift={30} />
       <FloralSide src="/floral/rail-right-rose.webp" side="right" width={120} opacity={0.55} drift={30} />
       <FloralBand src="/floral/bottom-band-cosmos.webp" height={240} opacity={0.5} />
