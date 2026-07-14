@@ -574,13 +574,17 @@ function Mensaje() {
    ═══════════════════════════════════════════════════════ */
 function Familias() {
   return (
-    <Section style={{ paddingTop: 20 }}>
-      <RevealItem>
+    <Section style={{ paddingTop: 20, position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-meadow.webp" side="left" width={110} opacity={0.5} drift={26} />
+      <FloralSide src="/floral/rail-right-meadow.webp" side="right" width={110} opacity={0.5} drift={26} />
+      <RevealItem style={{ position: "relative", zIndex: 1 }}>
         <SectionTitle title="NUESTROS PADRES" tone={C.sage} />
       </RevealItem>
 
       <Reveal
         style={{
+          position: "relative",
+          zIndex: 1,
           maxWidth: 520,
           margin: "0 auto",
           display: "flex",
@@ -701,8 +705,8 @@ function FloralInterlude() {
 function Ceremonia() {
   return (
     <Section id="ceremonia" style={{ position: "relative", overflow: "hidden" }}>
-      <FloralSide src="/floral/rail-left-meadow.webp" side="left" width={140} opacity={0.75} drift={36} />
-      <FloralSide src="/floral/rail-right-meadow.webp" side="right" width={140} opacity={0.75} drift={36} />
+      <FloralSide src="/floral/rail-left-meadow.webp" side="left" width={155} opacity={0.8} drift={36} />
+      <FloralSide src="/floral/rail-right-meadow.webp" side="right" width={155} opacity={0.8} drift={36} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 460, margin: "0 auto" }}>
         <RevealItem>
           <SectionTitle eyebrow="Civil" title="CEREMONIA" tone={C.wine} />
@@ -999,12 +1003,14 @@ function Itinerario() {
   ];
 
   return (
-    <Section id="itinerario">
-      <RevealItem>
+    <Section id="itinerario" style={{ position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-pink.webp" side="left" width={130} opacity={0.55} drift={40} />
+      <FloralSide src="/floral/rail-right-pink.webp" side="right" width={130} opacity={0.55} drift={40} />
+      <RevealItem style={{ position: "relative", zIndex: 1 }}>
         <SectionTitle title="ITINERARIO" tone={C.olive} />
       </RevealItem>
 
-      <div style={{ maxWidth: 320, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 320, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center" }}>
         {items.map((item, i) => (
           /* Cada momento dispara su propia animación al entrar en viewport — efecto de
              revelado en cadena bajando por el itinerario, no todo junto. */
@@ -1102,8 +1108,8 @@ function Hospedaje() {
 
   return (
     <Section id="hospedaje" style={{ position: "relative", overflow: "hidden" }}>
-      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={130} opacity={0.65} drift={32} />
-      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={130} opacity={0.65} drift={32} />
+      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={145} opacity={0.75} drift={32} />
+      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={145} opacity={0.75} drift={32} />
       <Reveal style={{ position: "relative", zIndex: 1 }}>
         <RevealItem>
           <SectionTitle title="HOSPEDAJE" tone={C.mauve} />
@@ -1254,8 +1260,8 @@ function Hospedaje() {
 function Vestimenta() {
   return (
     <Section style={{ position: "relative", overflow: "hidden" }}>
-      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={120} opacity={0.6} drift={28} />
-      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={120} opacity={0.6} drift={28} />
+      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={140} opacity={0.7} drift={28} />
+      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={140} opacity={0.7} drift={28} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 360, margin: "0 auto" }}>
         <RevealItem>
         <h2
@@ -1400,8 +1406,10 @@ function Vestimenta() {
    ═══════════════════════════════════════════════════════ */
 function AvisoNinos() {
   return (
-    <Section>
-      <Reveal style={{ maxWidth: 360, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+    <Section style={{ position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-pink.webp" side="left" width={100} opacity={0.45} drift={22} />
+      <FloralSide src="/floral/rail-right-pink.webp" side="right" width={100} opacity={0.45} drift={22} />
+      <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 360, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         <RevealItem>
         <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke={C.softGray} strokeWidth="1.4" aria-hidden="true">
           <circle cx="16" cy="8" r="4" />
@@ -1448,6 +1456,8 @@ function AvisoNinos() {
 function MesaRegalos() {
   return (
     <Section id="regalos" style={{ position: "relative", overflow: "hidden" }}>
+      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={120} opacity={0.55} drift={30} />
+      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={120} opacity={0.55} drift={30} />
       <FloralBand src="/floral/bottom-band-cosmos.webp" height={240} opacity={0.5} />
       <div style={{ position: "relative", zIndex: 1 }}>
       <Reveal>
