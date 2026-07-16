@@ -304,9 +304,6 @@ function Hero() {
         paddingRight: 24,
       }}
     >
-      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={170} opacity={0.85} drift={30} />
-      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={170} opacity={0.85} drift={30} />
-
       <motion.div
         style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}
         initial={reduce ? undefined : { opacity: 0, y: 24 }}
@@ -439,6 +436,21 @@ function Hero() {
 
       <Countdown />
       </motion.div>
+
+      {/* Dissolve inferior — se estira hacia arriba */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 120,
+          background: `linear-gradient(to bottom, transparent, ${C.cream})`,
+          zIndex: 2,
+          pointerEvents: "none",
+        }}
+      />
     </section>
   );
 }
@@ -521,6 +533,12 @@ function Frase() {
   return (
     <Section style={{ paddingTop: 88, paddingBottom: 88, position: "relative", overflow: "hidden" }}>
       <SectionBg src="/floral/bg-frase.webp" opacity={0.5} parallax drift={50} />
+
+      {/* Dissolve superior */}
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to bottom, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+      {/* Dissolve inferior */}
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to top, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 520, margin: "0 auto" }}>
         <RevealItem>
           <Ornament width={70} tone={C.wine} />
@@ -601,9 +619,9 @@ function Mensaje() {
 function Familias() {
   return (
     <Section style={{ paddingTop: 20, position: "relative", overflow: "hidden" }}>
-      <SectionBg src="/floral/bg-familias.webp" opacity={0.35} />
-      <FloralSide src="/floral/rail-left-meadow.webp" side="left" width={110} opacity={0.5} drift={26} />
-      <FloralSide src="/floral/rail-right-meadow.webp" side="right" width={110} opacity={0.5} drift={26} />
+      <SectionBg src="/floral/bg-familias.webp" opacity={0.35} parallax drift={40} />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to bottom, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to top, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
       <RevealItem style={{ position: "relative", zIndex: 1 }}>
         <SectionTitle title="NUESTROS PADRES" tone={C.sage} />
       </RevealItem>
@@ -698,33 +716,7 @@ function Familias() {
   );
 }
 
-/* ═══════════════════════════════════════════════════════
-   FLORAL INTERLUDE — pausa ornamental entre Padres y Ceremonia
-   ═══════════════════════════════════════════════════════ */
-function FloralInterlude() {
-  return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "relative",
-        overflow: "hidden",
-        backgroundColor: C.cream,
-        height: "clamp(210px, 32vw, 320px)",
-      }}
-    >
-      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={180} opacity={0.95} drift={54} />
-      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={180} opacity={0.95} drift={54} />
-      <Reveal
-        className="flex items-center justify-center"
-        style={{ position: "relative", zIndex: 1, height: "100%" }}
-      >
-        <RevealItem>
-          <Ornament width={90} tone={C.mauve} />
-        </RevealItem>
-      </Reveal>
-    </div>
-  );
-}
+/* FloralInterlude eliminado — reemplazado por dissolves en cada sección */
 
 /* ═══════════════════════════════════════════════════════
    CEREMONIA
@@ -732,9 +724,9 @@ function FloralInterlude() {
 function Ceremonia() {
   return (
     <Section id="ceremonia" style={{ position: "relative", overflow: "hidden" }}>
-      <SectionBg src="/floral/bg-ceremonia.webp" opacity={0.4} />
-      <FloralSide src="/floral/rail-left-meadow.webp" side="left" width={155} opacity={0.8} drift={36} />
-      <FloralSide src="/floral/rail-right-meadow.webp" side="right" width={155} opacity={0.8} drift={36} />
+      <SectionBg src="/floral/bg-ceremonia.webp" opacity={0.4} parallax drift={40} />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to bottom, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to top, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 460, margin: "0 auto" }}>
         <RevealItem>
           <SectionTitle eyebrow="Civil" title="CEREMONIA" tone={C.wine} />
@@ -1032,9 +1024,9 @@ function Itinerario() {
 
   return (
     <Section id="itinerario" style={{ position: "relative", overflow: "hidden" }}>
-      <SectionBg src="/floral/bg-itinerario.webp" opacity={0.35} />
-      <FloralSide src="/floral/rail-left-pink.webp" side="left" width={130} opacity={0.55} drift={40} />
-      <FloralSide src="/floral/rail-right-pink.webp" side="right" width={130} opacity={0.55} drift={40} />
+      <SectionBg src="/floral/bg-itinerario.webp" opacity={0.35} parallax drift={40} />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to bottom, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to top, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
       <RevealItem style={{ position: "relative", zIndex: 1 }}>
         <SectionTitle title="ITINERARIO" tone={C.olive} />
       </RevealItem>
@@ -1137,9 +1129,9 @@ function Hospedaje() {
 
   return (
     <Section id="hospedaje" style={{ position: "relative", overflow: "hidden" }}>
-      <SectionBg src="/floral/bg-hospedaje.webp" opacity={0.4} />
-      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={145} opacity={0.75} drift={32} />
-      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={145} opacity={0.75} drift={32} />
+      <SectionBg src="/floral/bg-hospedaje.webp" opacity={0.4} parallax drift={40} />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to bottom, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to top, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
       <Reveal style={{ position: "relative", zIndex: 1 }}>
         <RevealItem>
           <SectionTitle title="HOSPEDAJE" tone={C.mauve} />
@@ -1290,9 +1282,9 @@ function Hospedaje() {
 function Vestimenta() {
   return (
     <Section style={{ position: "relative", overflow: "hidden" }}>
-      <SectionBg src="/floral/bg-vestimenta.webp" opacity={0.4} />
-      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={140} opacity={0.7} drift={28} />
-      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={140} opacity={0.7} drift={28} />
+      <SectionBg src="/floral/bg-vestimenta.webp" opacity={0.4} parallax drift={40} />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to bottom, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to top, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 360, margin: "0 auto" }}>
         <RevealItem>
         <h2
@@ -1438,8 +1430,6 @@ function Vestimenta() {
 function AvisoNinos() {
   return (
     <Section style={{ position: "relative", overflow: "hidden" }}>
-      <FloralSide src="/floral/rail-left-pink.webp" side="left" width={100} opacity={0.45} drift={22} />
-      <FloralSide src="/floral/rail-right-pink.webp" side="right" width={100} opacity={0.45} drift={22} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 360, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
         <RevealItem>
         <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke={C.softGray} strokeWidth="1.4" aria-hidden="true">
@@ -1487,10 +1477,9 @@ function AvisoNinos() {
 function MesaRegalos() {
   return (
     <Section id="regalos" style={{ position: "relative", overflow: "hidden" }}>
-      <SectionBg src="/floral/bg-vestimenta.webp" opacity={0.35} />
-      <FloralSide src="/floral/rail-left-rose.webp" side="left" width={120} opacity={0.55} drift={30} />
-      <FloralSide src="/floral/rail-right-rose.webp" side="right" width={120} opacity={0.55} drift={30} />
-      <FloralBand src="/floral/bottom-band-cosmos.webp" height={240} opacity={0.5} />
+      <SectionBg src="/floral/bg-vestimenta.webp" opacity={0.35} parallax drift={40} />
+      <div aria-hidden="true" style={{ position: "absolute", top: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to bottom, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
+      <div aria-hidden="true" style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 90, background: `linear-gradient(to top, ${C.cream}, transparent)`, zIndex: 1, pointerEvents: "none" }} />
       <div style={{ position: "relative", zIndex: 1 }}>
       <Reveal>
         <RevealItem>
@@ -1735,7 +1724,6 @@ export function InvitationClient({ pases, nombre }: { pases: number; nombre: str
           sustituir por fotos reales de Ana Laura & Francisco (ver props: src, aspect, tone) */}
       <Ceremonia />
       <Itinerario />
-      <FloralInterlude />
       <Hospedaje />
       <Vestimenta />
       <Divider tone={C.olive} />
