@@ -47,7 +47,9 @@ export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
     setFading(true);
   }
 
-  function handleFadeOutEnd() {
+  function handleFadeOutEnd(e: React.TransitionEvent) {
+    // Solo actuar cuando termina la opacidad (evita disparos múltiples por filter/transform)
+    if (e.propertyName !== "opacity") return;
     setDone(true);
     // Reproducir canción al revelar la invitación (disco de vinil visible)
     audioApi.current?.play();
@@ -73,7 +75,12 @@ export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
             zIndex: 9999,
             overflow: "hidden",
             opacity: fading ? 0 : 1,
-            transition: fading ? "opacity 0.65s ease-out" : "none",
+            filter: fading ? "blur(20px)" : "blur(0px)",
+            transform: fading ? "scale(1.07)" : "scale(1)",
+            transition: fading
+              ? "opacity 0.9s ease-out, filter 0.9s ease-out, transform 1.15s ease-out"
+              : "none",
+            willChange: "opacity, filter, transform",
             pointerEvents: fading ? "none" : undefined,
           }}
         >

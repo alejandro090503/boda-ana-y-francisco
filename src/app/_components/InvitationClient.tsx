@@ -1349,7 +1349,7 @@ function Vestimenta() {
             textAlign: "center",
           }}
         >
-          Para esta ocasión les pedimos asistir con vestimenta de etiqueta
+          Para esta ocasión les pedimos asistir con vestimenta formal
         </p>
 
         <p
@@ -1389,11 +1389,7 @@ function Vestimenta() {
             { c: "#FFFFFF", n: "Blanco" },
             { c: "#F0F2BD", n: "Amarillo" },
             { c: "#FCD9FF", n: "Rosa" },
-            { c: "#170000", n: "Vino oscuro" },
-            { c: "#350A06", n: "Vino" },
             { c: "#56070C", n: "Guinda" },
-            { c: "#8F3D38", n: "Rosa vino" },
-            { c: "#CB7169", n: "Terracota" },
           ].map((s) => (
             <div key={s.c} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
               <span aria-hidden="true" style={{ width: 26, height: 26, borderRadius: "50%", backgroundColor: s.c, border: `1px solid ${C.border}` }} />
