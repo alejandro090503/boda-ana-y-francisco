@@ -1384,8 +1384,11 @@ function Vestimenta() {
         >
           Favor de evitar estos colores
         </p>
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "flex-start" }}>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", alignItems: "flex-start", flexWrap: "wrap" }}>
           {[
+            { c: "#FFFFFF", n: "Blanco" },
+            { c: "#F0F2BD", n: "Amarillo" },
+            { c: "#FCD9FF", n: "Rosa" },
             { c: "#170000", n: "Vino oscuro" },
             { c: "#350A06", n: "Vino" },
             { c: "#56070C", n: "Guinda" },
