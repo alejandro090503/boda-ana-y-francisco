@@ -1306,60 +1306,35 @@ function Vestimenta() {
         </h2>
         </RevealItem>
 
-        {/* Siluetas elegantes — referencia editorial */}
+        {/* Ilustraciones de vestimenta formal — dama y caballero */}
         <RevealItem
           aria-hidden="true"
           style={{
             display: "flex",
             alignItems: "flex-end",
             justifyContent: "center",
-            gap: 36,
-            margin: "0 auto 32px",
+            gap: 24,
+            margin: "0 auto 34px",
           }}
         >
-          {/* Dama — vestido mermaid con escote corazón */}
-          <svg width="68" height="195" viewBox="0 0 80 200">
-            <path
-              fill={C.black}
-              d="M22,6
-                 L24,20
-                 C16,38 12,62 18,84
-                 C22,104 18,124 16,144
-                 C10,168 2,188 0,200
-                 L80,200
-                 C78,188 70,168 64,144
-                 C62,124 58,104 62,84
-                 C68,62 64,38 56,20
-                 L58,6
-                 C56,6 48,20 40,20
-                 C32,20 24,6 22,6
-                 Z"
-            />
-          </svg>
+          {/* Caballero — traje formal */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/caballero.webp"
+            alt=""
+            style={{ height: 232, width: "auto", display: "block", filter: "drop-shadow(0 10px 18px rgba(13,13,13,0.14))" }}
+          />
 
           {/* Separador */}
-          <div style={{ width: 1, height: 130, backgroundColor: C.black, opacity: 0.12, alignSelf: "center" }} />
+          <div style={{ width: 1, height: 150, background: `linear-gradient(to bottom, transparent, ${C.gold}, transparent)`, opacity: 0.4, alignSelf: "center" }} />
 
-          {/* Caballero — saco con moño */}
-          <svg width="118" height="140" viewBox="0 0 140 130">
-            {/* Cuerpo del saco — silueta sólida con hombros curvos */}
-            <path
-              fill={C.black}
-              d="M0,30
-                 C0,14 10,4 26,4
-                 L114,4
-                 C130,4 140,14 140,30
-                 L140,130 L0,130 Z"
-            />
-            {/* Apertura V mostrando camisa */}
-            <path fill="#FFFFFF" d="M50,4 L90,4 L70,68 Z" />
-            {/* Moño — ala izquierda (dentro del V blanco) */}
-            <polygon fill={C.black} points="58,12 58,30 68,21" />
-            {/* Moño — ala derecha (dentro del V blanco) */}
-            <polygon fill={C.black} points="82,12 82,30 72,21" />
-            {/* Moño — nudo central */}
-            <rect fill={C.black} x="66" y="13" width="8" height="16" rx="1" />
-          </svg>
+          {/* Dama — vestido largo */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/dama.webp"
+            alt=""
+            style={{ height: 232, width: "auto", display: "block", filter: "drop-shadow(0 10px 18px rgba(13,13,13,0.14))" }}
+          />
         </RevealItem>
 
         <RevealItem>
@@ -1434,8 +1409,8 @@ function AvisoNinos() {
   return (
     <Section style={{ position: "relative", overflow: "hidden" }}>
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 360, margin: "0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-        <RevealItem>
-        <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke={C.softGray} strokeWidth="1.4" aria-hidden="true">
+        <RevealItem style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+        <svg width="22" height="22" viewBox="0 0 32 32" fill="none" stroke={C.softGray} strokeWidth="1.4" aria-hidden="true" style={{ display: "block", margin: "0 auto 14px" }}>
           <circle cx="16" cy="8" r="4" />
           <path d="M8 28 Q8 18 16 18 Q24 18 24 28" />
           <line x1="5" y1="5" x2="27" y2="27" strokeLinecap="round" />
@@ -1639,44 +1614,77 @@ function Footer() {
     <section
       className="text-center"
       style={{
-        backgroundColor: C.black,
-        paddingTop: 0,
-        paddingBottom: 72,
-        paddingLeft: 24,
-        paddingRight: 24,
+        position: "relative",
+        overflow: "hidden",
+        backgroundColor: C.cream,
+        padding: "76px 24px clamp(150px, 34vw, 260px)",
       }}
     >
+      {/* Borde floral inferior — pradera de flores silvestres */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: "clamp(150px, 34vw, 300px)",
+          backgroundImage: "url(/floral/bg-footer.webp)",
+          backgroundSize: "cover",
+          backgroundPosition: "center bottom",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.6,
+          pointerEvents: "none",
+          zIndex: 0,
+          WebkitMaskImage: "linear-gradient(to bottom, transparent 0%, black 55%)",
+          maskImage: "linear-gradient(to bottom, transparent 0%, black 55%)",
+        }}
+      />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
       <Reveal>
-        {/* Firma de paleta — los 5 colores de la boda, como swatch editorial */}
-        <RevealItem aria-hidden="true" style={{ display: "flex", width: "100%", height: 6, marginBottom: 56 }}>
-          {[C.oliveLight, C.sage, C.goldLight, C.mauve, C.wine].map((c) => (
-            <div key={c} style={{ flex: 1, backgroundColor: c }} />
-          ))}
+        {/* Ornamento floral dorado */}
+        <RevealItem>
+          <svg viewBox="0 0 260 44" fill="none" aria-hidden="true" style={{ display: "block", margin: "0 auto 26px", width: "min(230px, 62vw)", height: "auto" }}>
+            <g stroke={C.gold} strokeWidth="0.9" fill="none" opacity="0.85">
+              <path d="M18 22 Q60 8 100 22 Q118 32 130 22 Q142 12 160 22 Q200 36 242 22" />
+              <circle cx="130" cy="22" r="3.4" fill={C.gold} stroke="none" />
+              <path d="M127 15 Q130 10 133 15" opacity="0.7" />
+              <path d="M127 29 Q130 34 133 29" opacity="0.7" />
+            </g>
+          </svg>
         </RevealItem>
 
         <RevealItem>
           <p
-            aria-hidden="true"
             style={{
               fontFamily: "var(--font-script)",
-              color: C.white,
-              fontSize: "clamp(2.6rem, 9vw, 4.4rem)",
-              lineHeight: 1,
+              color: C.wineDeep,
+              fontSize: "clamp(2.6rem, 10vw, 4.4rem)",
+              lineHeight: 1.05,
               textAlign: "center",
             }}
           >
-            A &amp; F
+            Ana Laura <span style={{ color: C.gold }}>&amp;</span> Francisco
           </p>
         </RevealItem>
 
         <div
+          aria-hidden="true"
           style={{
-            height: 1,
-            width: 36,
-            backgroundColor: "rgba(255,255,255,0.25)",
-            margin: "24px auto",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+            margin: "22px auto 24px",
           }}
-        />
+        >
+          <div style={{ height: 1, width: 40, background: `linear-gradient(to right, transparent, ${C.gold})` }} />
+          <svg width="9" height="9" viewBox="0 0 10 10" fill={C.gold} aria-hidden="true">
+            <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" />
+          </svg>
+          <div style={{ height: 1, width: 40, background: `linear-gradient(to left, transparent, ${C.gold})` }} />
+        </div>
 
         <RevealItem>
           <p
@@ -1684,9 +1692,9 @@ function Footer() {
               fontFamily: "var(--font-body)",
               fontWeight: 500,
               fontSize: 11,
-              letterSpacing: "0.22em",
+              letterSpacing: "0.28em",
               textTransform: "uppercase",
-              color: C.white,
+              color: C.charcoal,
               textAlign: "center",
             }}
           >
@@ -1695,20 +1703,46 @@ function Footer() {
 
           <p
             style={{
-              fontFamily: "var(--font-body)",
-              fontWeight: 500,
-              fontSize: 10,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.5)",
+              fontFamily: "var(--font-heading)",
+              fontStyle: "italic",
+              fontWeight: 400,
+              fontSize: 15,
+              color: C.gray,
               textAlign: "center",
-              marginTop: 14,
+              marginTop: 8,
             }}
           >
-            @elysium.invitaciones
+            San Juan del Río, Querétaro
           </p>
+
+          <a
+            href="https://www.instagram.com/elysium.invitaciones/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 7,
+              marginTop: 26,
+              fontFamily: "var(--font-body)",
+              fontWeight: 500,
+              fontSize: 10.5,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+              color: C.softGray,
+              textDecoration: "none",
+            }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" />
+            </svg>
+            @elysium.invitaciones
+          </a>
         </RevealItem>
       </Reveal>
+      </div>
     </section>
   );
 }

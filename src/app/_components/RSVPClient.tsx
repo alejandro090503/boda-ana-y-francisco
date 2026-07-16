@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, useReducedMotion } from "framer-motion";
 
 const PANEL_API = "https://panel-invitados.vercel.app/api/confirmar";
 const RSVP_URL = "https://boda-ana-y-francisco.vercel.app";
@@ -10,9 +9,12 @@ const DEADLINE = new Date(2026, 7, 28, 23, 59, 59, 999);
 const C = {
   black: "#0D0D0D",
   wine: "#B02A31",
+  wineDeep: "#8A2027",
   gold: "#A66B34",
+  goldDeep: "#8A5426",
   goldLight: "#C17D3F",
-  mauve: "#83488B",
+  green: "#4F7A47",
+  greenDeep: "#2F5A28",
   gray: "#6B6B6B",
   softGray: "#767676",
   charcoal: "#2C2C2C",
@@ -21,62 +23,7 @@ const C = {
   white: "#FFFFFF",
 } as const;
 
-/* ─── Ticket ─── */
-function PaseTicket({ pases, nombre }: { pases: number; nombre: string }) {
-  return (
-    <div className="relative mx-auto" style={{ width: "min(300px, 88vw)" }}>
-      <div
-        className="absolute -inset-6 pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(176,42,49,0.12) 0%, transparent 70%)", filter: "blur(20px)" }}
-        aria-hidden="true"
-      />
-      <div className="relative" style={{ backgroundColor: C.white, border: `1.5px solid ${C.mauve}`, boxShadow: "0 20px 60px rgba(13,13,13,0.08)", overflow: "hidden" }}>
-        <div style={{ backgroundColor: C.wine, height: 6 }} />
-        <div style={{ padding: "40px 32px 32px", textAlign: "center" }}>
-          <div style={{ position: "absolute", top: 20, left: 14, width: 16, height: 16, borderTop: `2px solid ${C.mauve}`, borderLeft: `2px solid ${C.mauve}` }} aria-hidden="true" />
-          <div style={{ position: "absolute", top: 20, right: 14, width: 16, height: 16, borderTop: `2px solid ${C.mauve}`, borderRight: `2px solid ${C.mauve}` }} aria-hidden="true" />
-
-          <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 9, letterSpacing: "0.3em", textTransform: "uppercase", color: C.wine, textAlign: "center", marginBottom: 16 }}>
-            Invitación de boda
-          </p>
-
-          <p style={{ fontFamily: "var(--font-script)", color: C.black, fontSize: "clamp(1.1rem, 5.5vw, 1.8rem)", lineHeight: 1.2, fontWeight: 400, textAlign: "center", width: "100%", overflowWrap: "break-word" }}>
-            {nombre || "Invitado"}
-          </p>
-
-          <div style={{ height: 1, width: 40, backgroundColor: C.gold, opacity: 0.5, margin: "22px auto" }} aria-hidden="true" />
-
-          <p style={{ fontFamily: "var(--font-heading)", fontStyle: "italic", fontWeight: 400, fontSize: 13, color: C.softGray, letterSpacing: "0.04em", marginBottom: 6 }}>
-            admite
-          </p>
-          <p style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 72, color: C.black, lineHeight: 1, letterSpacing: "0.02em" }}>
-            {pases}
-          </p>
-          <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 10, letterSpacing: "0.3em", textTransform: "uppercase", color: C.charcoal, textAlign: "center", marginTop: 8, marginBottom: 28 }}>
-            {pases === 1 ? "Persona" : "Personas"}
-          </p>
-
-          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 28, marginLeft: -32, marginRight: -32 }} aria-hidden="true">
-            <div style={{ height: 1, flex: 1, borderTop: `1px dashed ${C.border}` }} />
-            <div style={{ width: 10, height: 10, borderRadius: "50%", backgroundColor: C.cream, border: `1px solid ${C.border}` }} />
-            <div style={{ height: 1, flex: 1, borderTop: `1px dashed ${C.border}` }} />
-          </div>
-
-          <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 11, letterSpacing: "0.2em", textTransform: "uppercase", color: C.charcoal, textAlign: "center", marginBottom: 4 }}>
-            10 · Octubre · 2026
-          </p>
-          <p style={{ fontFamily: "var(--font-heading)", fontStyle: "italic", fontWeight: 400, fontSize: 13, color: C.gray, textAlign: "center", marginBottom: 20 }}>
-            San Juan del Río, Querétaro
-          </p>
-        </div>
-        <div style={{ backgroundColor: C.wine, height: 6 }} />
-      </div>
-    </div>
-  );
-}
-
 export function RSVPClient({ pases, nombre }: { pases: number; nombre: string }) {
-  const reduceMotion = useReducedMotion();
   const frozen = Date.now() > DEADLINE.getTime();
   const [choice, setChoice] = useState<"yes" | "no" | null>(null);
   const [nombres, setNombres] = useState<string[]>(Array(pases).fill(""));
@@ -97,6 +44,7 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
             setNombres(d.nombres_confirmados);
           }
           setBtnLabel("Actualizar respuesta");
+          setFeedbackColor(c === "yes" ? C.greenDeep : C.softGray);
           setFeedback(
             c === "yes"
               ? "¡Ya tienes confirmada tu asistencia! Puedes actualizar tu respuesta."
@@ -142,7 +90,7 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
         }),
       });
       setBtnLabel("Actualizar respuesta");
-      setFeedbackColor(choice === "yes" ? C.wine : C.softGray);
+      setFeedbackColor(choice === "yes" ? C.greenDeep : C.softGray);
       setFeedback(
         choice === "yes"
           ? "¡Tu asistencia ha sido confirmada! Nos vemos pronto."
@@ -157,143 +105,242 @@ export function RSVPClient({ pases, nombre }: { pases: number; nombre: string })
     }
   }
 
-  const btnBase: React.CSSProperties = {
-    fontFamily: "var(--font-body)",
-    fontWeight: 500,
-    fontSize: 11,
-    letterSpacing: "0.28em",
-    textTransform: "uppercase",
+  const toggleBase: React.CSSProperties = {
+    flex: 1,
+    padding: "14px 8px",
+    border: `1.5px solid ${C.border}`,
+    background: "rgba(255,255,255,0.6)",
     cursor: frozen ? "not-allowed" : "pointer",
-    border: "none",
-    padding: "16px 40px",
-    transition: "opacity .25s",
-    opacity: frozen ? 0.45 : 1,
+    fontFamily: "var(--font-heading)",
+    fontStyle: "italic",
+    fontSize: 17,
+    color: C.charcoal,
+    borderRadius: 8,
+    transition: "all .25s",
   };
 
   return (
-    <section id="rsvp" className="pt-36 pb-36 md:pt-52 md:pb-52 px-6 text-center" style={{ backgroundColor: C.cream }}>
-      <div className="max-w-md mx-auto flex flex-col items-center">
-        {/* Eyebrow */}
-        <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 11, letterSpacing: "0.28em", textTransform: "uppercase", color: C.wine, textAlign: "center", marginBottom: 16 }}>
-          Confirmar asistencia
-        </p>
+    <section
+      id="rsvp"
+      style={{ position: "relative", overflow: "hidden", backgroundColor: C.cream, padding: "clamp(72px,14vw,120px) 20px" }}
+    >
+      {/* Fondo floral dorado con desvanecimiento en los bordes */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          backgroundImage: "url(/floral/bg-rsvp.webp)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.5,
+          pointerEvents: "none",
+          zIndex: 0,
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0%, black 14%, black 86%, transparent 100%)",
+        }}
+      />
 
-        <h2 style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: "clamp(2.5rem, 10vw, 4rem)", letterSpacing: "0.12em", color: C.black, lineHeight: 1, marginBottom: 20 }}>
-          RSVP
-        </h2>
-
-        {/* Ornament */}
-        <div className="flex items-center gap-3 mb-10">
-          <div style={{ height: 1.5, width: 36, backgroundColor: C.mauve, opacity: 0.55 }} />
-          <svg width="13" height="13" viewBox="0 0 10 10" fill="none">
-            <path d="M5 0 L6.2 3.8 L10 5 L6.2 6.2 L5 10 L3.8 6.2 L0 5 L3.8 3.8 Z" fill={C.mauve} />
-          </svg>
-          <div style={{ height: 1.5, width: 36, backgroundColor: C.mauve, opacity: 0.55 }} />
-        </div>
-
-        <p style={{ fontFamily: "var(--font-heading)", fontWeight: 400, fontStyle: "italic", fontSize: "clamp(1rem, 4vw, 1.2rem)", color: C.charcoal, lineHeight: 1.75, marginBottom: 48, maxWidth: 320, textAlign: "center" }}>
-          Confirma tu asistencia antes del{" "}
-          <span style={{ fontWeight: 600, fontStyle: "normal", color: C.black }}>28 de agosto de 2026</span>.
-        </p>
-
-        {/* Ticket with nombre — entra con resorte al hacer scroll */}
-        {reduceMotion ? (
-          <PaseTicket pases={pases} nombre={nombre} />
-        ) : (
-          <motion.div
-            initial={{ opacity: 0, y: 46, scale: 0.94, rotate: -1.5 }}
-            whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ type: "spring", stiffness: 80, damping: 14, mass: 1 }}
-          >
-            <PaseTicket pases={pases} nombre={nombre} />
-          </motion.div>
-        )}
-
-        <div style={{ height: 40 }} />
-
-        {/* Toggle */}
-        {!frozen && (
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center", marginBottom: 28 }}>
-            <button
-              onClick={() => handleSelect("yes")}
-              style={{
-                ...btnBase,
-                backgroundColor: choice === "yes" ? C.wine : "transparent",
-                color: choice === "yes" ? C.white : C.charcoal,
-                border: `1.5px solid ${choice === "yes" ? C.wine : C.border}`,
-              }}
-            >
-              Asistiré
-            </button>
-            <button
-              onClick={() => handleSelect("no")}
-              style={{
-                ...btnBase,
-                backgroundColor: choice === "no" ? C.charcoal : "transparent",
-                color: choice === "no" ? C.white : C.charcoal,
-                border: `1.5px solid ${choice === "no" ? C.charcoal : C.border}`,
-              }}
-            >
-              No podré asistir
-            </button>
-          </div>
-        )}
-
-        {/* Name fields */}
-        {choice === "yes" && (
-          <div style={{ width: "100%", maxWidth: 320, display: "flex", flexDirection: "column", gap: 12, marginBottom: 28, textAlign: "left" }}>
-            {nombres.map((n, i) => (
-              <div key={i}>
-                <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: C.softGray, marginBottom: 6 }}>
-                  {pases === 1 ? "Tu nombre completo" : `Invitado ${i + 1}`}
-                </p>
-                <input
-                  type="text"
-                  value={n}
-                  placeholder={`Invitado ${i + 1}`}
-                  autoComplete="off"
-                  onChange={(e) => {
-                    const copy = [...nombres];
-                    copy[i] = e.target.value;
-                    setNombres(copy);
-                  }}
-                  style={{
-                    width: "100%",
-                    padding: "12px 16px",
-                    border: `1px solid ${C.border}`,
-                    backgroundColor: C.white,
-                    fontFamily: "var(--font-body)",
-                    fontSize: 14,
-                    color: C.black,
-                    outline: "none",
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {/* Confirm button */}
-        <button
-          onClick={handleConfirm}
-          disabled={loading || frozen}
+      <div style={{ position: "relative", zIndex: 1, maxWidth: 560, margin: "0 auto" }}>
+        <div
           style={{
-            ...btnBase,
-            backgroundColor: C.wine,
-            color: C.white,
-            paddingLeft: `calc(40px + .28em)`,
+            position: "relative",
+            background: "rgba(255,255,255,0.86)",
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
+            border: `1px solid ${C.gold}55`,
+            padding: "clamp(44px,7vw,72px) clamp(26px,5vw,60px)",
+            boxShadow: "0 24px 64px rgba(138,32,39,0.10), 0 4px 20px rgba(166,107,52,0.14)",
           }}
         >
-          {btnLabel}
-        </button>
+          {/* Marco interior */}
+          <div aria-hidden="true" style={{ position: "absolute", inset: 10, border: `1px solid ${C.gold}33`, pointerEvents: "none" }} />
 
-        {/* Feedback */}
-        {feedback && (
-          <p style={{ fontFamily: "var(--font-heading)", fontStyle: "italic", fontSize: 16, color: feedbackColor, marginTop: 20, maxWidth: 320, textAlign: "center", lineHeight: 1.6 }}>
-            {feedback}
-          </p>
-        )}
+          {/* Esquinas decorativas */}
+          {[
+            { top: 0, left: 0, transform: "none" },
+            { top: 0, right: 0, transform: "scaleX(-1)" },
+            { bottom: 0, left: 0, transform: "scaleY(-1)" },
+            { bottom: 0, right: 0, transform: "scale(-1,-1)" },
+          ].map((pos, i) => (
+            <svg
+              key={i}
+              viewBox="0 0 52 52"
+              fill="none"
+              aria-hidden="true"
+              style={{ position: "absolute", width: 48, height: 48, pointerEvents: "none", ...pos }}
+            >
+              <path d="M2 50 L2 2 L50 2" stroke={C.gold} strokeWidth="0.9" opacity="0.6" />
+              <circle cx="2" cy="2" r="2.5" fill={C.gold} opacity="0.5" />
+            </svg>
+          ))}
+
+          <div style={{ textAlign: "center", position: "relative" }}>
+            {/* Ornamento superior */}
+            <svg viewBox="0 0 320 56" fill="none" aria-hidden="true" style={{ display: "block", margin: "0 auto 26px", width: "min(280px,72vw)", height: "auto" }}>
+              <g stroke={C.gold} strokeWidth="0.9" opacity="0.85" fill="none">
+                <path d="M18 28 Q50 10 82 28 Q106 42 130 28" />
+                <path d="M190 28 Q214 42 238 28 Q270 10 302 28" />
+                <circle cx="160" cy="28" r="5.5" />
+                <circle cx="160" cy="28" r="2" fill={C.gold} stroke="none" />
+                <path d="M154 20 Q160 13 166 20" opacity="0.55" />
+                <path d="M154 36 Q160 43 166 36" opacity="0.55" />
+              </g>
+            </svg>
+
+            <p style={{ fontFamily: "var(--font-body)", fontWeight: 500, fontSize: 11, letterSpacing: "0.28em", textTransform: "uppercase", color: C.wine, marginBottom: 16 }}>
+              Confirmar asistencia
+            </p>
+
+            <h2 style={{ fontFamily: "var(--font-heading)", fontStyle: "italic", fontWeight: 500, fontSize: "clamp(2rem,6vw,3.1rem)", color: C.black, lineHeight: 1.15, marginBottom: 18 }}>
+              Tu presencia <em style={{ color: C.gold, fontStyle: "italic" }}>lo es</em> todo
+            </h2>
+
+            <p style={{ fontFamily: "var(--font-heading)", fontStyle: "italic", fontWeight: 400, fontSize: "clamp(1rem,4vw,1.2rem)", color: C.charcoal, lineHeight: 1.8, marginBottom: 30, maxWidth: 420, marginLeft: "auto", marginRight: "auto" }}>
+              Confirma tu asistencia antes del{" "}
+              <span style={{ fontWeight: 600, fontStyle: "normal", color: C.black }}>28 de agosto de 2026</span>. Nos encantará saber que estarás con nosotros.
+            </p>
+
+            {/* Nombre del invitado */}
+            {nombre && (
+              <p style={{ fontFamily: "var(--font-script)", fontSize: "clamp(2rem,8vw,3rem)", color: C.wineDeep, lineHeight: 1.2, margin: "8px auto 6px", overflowWrap: "break-word" }}>
+                {nombre}
+              </p>
+            )}
+
+            {/* Divisor con corazón */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14, maxWidth: 320, margin: "10px auto 30px" }}>
+              <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, ${C.gold}77, transparent)` }} />
+              <svg width="16" height="16" viewBox="0 0 24 24" fill={C.gold} style={{ opacity: 0.8, flexShrink: 0 }} aria-hidden="true">
+                <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402z" />
+              </svg>
+              <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, ${C.gold}77, transparent)` }} />
+            </div>
+
+            {/* Número de invitados */}
+            <div style={{ maxWidth: 420, margin: "0 auto 26px", padding: "20px 30px", background: "rgba(166,107,52,0.07)", border: `1px solid ${C.gold}44`, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+              <span style={{ fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 600, letterSpacing: "0.28em", textTransform: "uppercase", color: C.softGray, textAlign: "left" }}>
+                Lugares reservados
+              </span>
+              <span style={{ fontFamily: "var(--font-heading)", fontStyle: "italic", fontSize: "clamp(2.2rem,5vw,3rem)", color: C.wineDeep, lineHeight: 1 }}>
+                {pases}
+              </span>
+            </div>
+
+            {/* Toggle */}
+            {!frozen && (
+              <div style={{ display: "flex", gap: 10, maxWidth: 420, margin: "0 auto 18px" }}>
+                <button
+                  onClick={() => handleSelect("yes")}
+                  style={{
+                    ...toggleBase,
+                    ...(choice === "yes"
+                      ? { background: "rgba(79,122,71,0.14)", borderColor: C.green, color: C.greenDeep }
+                      : {}),
+                  }}
+                >
+                  ¡Ahí estaré!
+                </button>
+                <button
+                  onClick={() => handleSelect("no")}
+                  style={{
+                    ...toggleBase,
+                    ...(choice === "no"
+                      ? { background: "rgba(166,107,52,0.10)", borderColor: C.goldDeep, color: C.goldDeep }
+                      : {}),
+                  }}
+                >
+                  No podré asistir
+                </button>
+              </div>
+            )}
+
+            {/* Campos de nombres */}
+            {choice === "yes" && !frozen && (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, maxWidth: 420, margin: "0 auto 22px" }}>
+                {nombres.map((n, i) => (
+                  <input
+                    key={i}
+                    type="text"
+                    value={n}
+                    placeholder={pases === 1 ? "Tu nombre completo" : `Invitado ${i + 1}`}
+                    autoComplete="off"
+                    onChange={(e) => {
+                      const copy = [...nombres];
+                      copy[i] = e.target.value;
+                      setNombres(copy);
+                    }}
+                    style={{
+                      width: "100%",
+                      padding: "15px 20px",
+                      border: `1.5px solid ${C.gold}47`,
+                      borderRadius: 12,
+                      background: "rgba(255,255,255,0.8)",
+                      fontFamily: "var(--font-body)",
+                      fontSize: 15,
+                      fontWeight: 500,
+                      color: C.black,
+                      letterSpacing: "0.03em",
+                      outline: "none",
+                      minHeight: 52,
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            {/* Botón confirmar — píldora */}
+            <button
+              onClick={handleConfirm}
+              disabled={loading || frozen}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 12,
+                width: "100%",
+                maxWidth: 420,
+                margin: "0 auto",
+                padding: "18px 36px",
+                borderRadius: 50,
+                border: `1.5px solid ${C.gold}88`,
+                background: frozen
+                  ? "rgba(120,118,118,0.25)"
+                  : `linear-gradient(135deg, ${C.wine} 0%, ${C.wineDeep} 100%)`,
+                fontFamily: "var(--font-body)",
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: "0.32em",
+                textTransform: "uppercase",
+                color: frozen ? C.softGray : C.cream,
+                cursor: frozen ? "not-allowed" : "pointer",
+                minHeight: 56,
+                boxShadow: frozen ? "none" : "0 8px 24px rgba(138,32,39,0.28), 0 2px 8px rgba(166,107,52,0.2)",
+                opacity: loading ? 0.7 : 1,
+                transition: "opacity .25s, transform .25s",
+              }}
+            >
+              {btnLabel}
+            </button>
+
+            {/* Feedback */}
+            {feedback && (
+              <p style={{ fontFamily: "var(--font-heading)", fontStyle: "italic", fontSize: 16, color: feedbackColor, marginTop: 20, maxWidth: 420, marginLeft: "auto", marginRight: "auto", lineHeight: 1.6 }}>
+                {feedback}
+              </p>
+            )}
+
+            {/* Fecha límite */}
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 26, fontFamily: "var(--font-body)", fontSize: 11, letterSpacing: "0.32em", textTransform: "uppercase", color: C.goldDeep, fontWeight: 600 }}>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm.5 5v5.25l4.5 2.67-.75 1.23L11 13V7h1.5z" />
+              </svg>
+              Fecha límite · 28 de agosto de 2026
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
