@@ -1,12 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
+import AudioPlayer, { AudioAPI } from "./AudioPlayer";
 
 export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
   const [fading, setFading] = useState(false);
   const [done,   setDone]   = useState(false);
   const videoRef  = useRef<HTMLVideoElement>(null);
-  const audioRef  = useRef<HTMLAudioElement>(null);
+  const audioApi  = useRef<AudioAPI>(null);
   const imgRef    = useRef<HTMLImageElement>(null);
   const btnRef    = useRef<HTMLButtonElement>(null);
   const loaderRef = useRef<HTMLDivElement>(null);
@@ -48,23 +49,14 @@ export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
 
   function handleFadeOutEnd() {
     setDone(true);
-    // Reproducir canción al revelar la invitación
-    const audio = audioRef.current;
-    if (audio) {
-      audio.volume = 0.55;
-      audio.play().catch(() => {});
-    }
+    // Reproducir canción al revelar la invitación (disco de vinil visible)
+    audioApi.current?.play();
   }
 
   return (
     <>
-      {/* Audio — servido desde Supabase (fuera de Vercel), preload="none" para no disparar egress */}
-      <audio
-        ref={audioRef}
-        src="https://bsjoelxktbvlavfoozhk.supabase.co/storage/v1/object/public/fotos-clientes/audio/boda-ana-y-francisco/cancion.mp3"
-        preload="none"
-        loop
-      />
+      {/* Reproductor de música con disco de vinil — controla la canción y aparece al revelar la invitación */}
+      <AudioPlayer ref={audioApi} />
 
       {/* Invitación siempre en DOM, visible debajo del loader */}
       {children}
