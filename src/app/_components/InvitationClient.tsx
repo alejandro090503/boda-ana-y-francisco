@@ -1382,13 +1382,15 @@ function Vestimenta() {
             marginBottom: 16,
           }}
         >
-          Colores reservados para la novia
+          Favor de evitar estos colores
         </p>
-        <div style={{ display: "flex", gap: 14, justifyContent: "center", alignItems: "flex-start" }}>
+        <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "flex-start" }}>
           {[
-            { c: "#FFFFFF", n: "Blanco" },
-            { c: "#F0F2BD", n: "Amarillo claro" },
-            { c: "#FCD9FF", n: "Rosa claro" },
+            { c: "#170000", n: "Vino oscuro" },
+            { c: "#350A06", n: "Vino" },
+            { c: "#56070C", n: "Guinda" },
+            { c: "#8F3D38", n: "Rosa vino" },
+            { c: "#CB7169", n: "Terracota" },
           ].map((s) => (
             <div key={s.c} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
               <span aria-hidden="true" style={{ width: 26, height: 26, borderRadius: "50%", backgroundColor: s.c, border: `1px solid ${C.border}` }} />
