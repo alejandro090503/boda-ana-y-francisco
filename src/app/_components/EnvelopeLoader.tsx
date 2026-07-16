@@ -127,7 +127,7 @@ export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
             }}
           />
 
-          {/* Botón */}
+          {/* Botón glassmorphism */}
           <button
             ref={btnRef}
             onClick={handleOpen}
@@ -137,25 +137,28 @@ export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
               left: "50%",
               transform: "translateX(-50%)",
               zIndex: 10,
-              background: "none",
-              border: "none",
+              background: "rgba(255,255,255,0.12)",
+              backdropFilter: "blur(16px)",
+              WebkitBackdropFilter: "blur(16px)",
+              border: "1px solid rgba(198,138,82,0.35)",
+              borderRadius: 40,
               cursor: "pointer",
               display: "flex",
-              flexDirection: "column",
               alignItems: "center",
-              gap: 14,
-              padding: "12px 24px",
+              gap: 12,
+              padding: "16px 36px",
               WebkitTapHighlightColor: "transparent",
               touchAction: "manipulation",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.15)",
             }}
           >
             <svg
-              width="28"
-              height="28"
+              width="20"
+              height="20"
               viewBox="0 0 32 32"
               fill="none"
-              stroke="#C68A52"
-              strokeWidth="1.2"
+              stroke="#D4A56A"
+              strokeWidth="1.4"
               strokeLinecap="round"
               strokeLinejoin="round"
               aria-hidden="true"
@@ -166,12 +169,12 @@ export function EnvelopeLoader({ children }: { children: React.ReactNode }) {
             </svg>
             <span
               style={{
-                fontFamily: "var(--font-body)",
-                fontWeight: 500,
-                fontSize: 11,
-                letterSpacing: "0.3em",
-                textTransform: "uppercase",
-                color: "#C68A52",
+                fontFamily: "var(--font-script)",
+                fontWeight: 400,
+                fontSize: 22,
+                color: "#D4A56A",
+                letterSpacing: "0.02em",
+                textShadow: "0 1px 4px rgba(0,0,0,0.3)",
               }}
             >
               Toca para abrir

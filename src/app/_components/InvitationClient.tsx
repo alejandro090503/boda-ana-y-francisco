@@ -257,22 +257,30 @@ function FloralBand({ src, height = 230, opacity = 0.95 }: { src: string; height
   );
 }
 
-function SectionBg({ src, opacity = 0.55 }: { src: string; opacity?: number }) {
+function SectionBg({ src, opacity = 0.55, parallax = false, drift = 40 }: { src: string; opacity?: number; parallax?: boolean; drift?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const y = useTransform(scrollYProgress, [0, 1], [drift, -drift]);
+
+  const baseStyle: React.CSSProperties = {
+    position: "absolute",
+    inset: parallax ? `-${drift}px 0` : "0",
+    pointerEvents: "none",
+    zIndex: 0,
+    backgroundImage: `url(${src})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    backgroundRepeat: "no-repeat",
+    opacity,
+  };
+
+  if (!parallax || reduce) {
+    return <div ref={ref} aria-hidden="true" style={{ ...baseStyle, inset: 0 }} />;
+  }
+
   return (
-    <div
-      aria-hidden="true"
-      style={{
-        position: "absolute",
-        inset: 0,
-        pointerEvents: "none",
-        zIndex: 0,
-        backgroundImage: `url(${src})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        opacity,
-      }}
-    />
+    <motion.div ref={ref} aria-hidden="true" style={{ ...baseStyle, y }} />
   );
 }
 
@@ -512,9 +520,7 @@ function SectionTitle({ eyebrow, title, tone }: { eyebrow?: string; title: strin
 function Frase() {
   return (
     <Section style={{ paddingTop: 88, paddingBottom: 88, position: "relative", overflow: "hidden" }}>
-      <SectionBg src="/floral/bg-frase.webp" opacity={0.45} />
-      <FloralSide src="/floral/rail-left-pink.webp" side="left" width={150} opacity={0.8} drift={38} />
-      <FloralSide src="/floral/rail-right-pink.webp" side="right" width={150} opacity={0.8} drift={38} />
+      <SectionBg src="/floral/bg-frase.webp" opacity={0.5} parallax drift={50} />
       <Reveal style={{ position: "relative", zIndex: 1, maxWidth: 520, margin: "0 auto" }}>
         <RevealItem>
           <Ornament width={70} tone={C.wine} />
