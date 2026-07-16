@@ -304,6 +304,9 @@ function Hero() {
         paddingRight: 24,
       }}
     >
+      <FloralSide src="/floral/rail-left-wild.webp" side="left" width={170} opacity={0.85} drift={30} />
+      <FloralSide src="/floral/rail-right-wild.webp" side="right" width={170} opacity={0.85} drift={30} />
+
       <motion.div
         style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", alignItems: "center" }}
         initial={reduce ? undefined : { opacity: 0, y: 24 }}
